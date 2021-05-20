@@ -1,0 +1,448 @@
+* {
+    text-align: center;
+    font-family: sans-serif;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+body {
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: rgb(252, 252, 252);
+}
+
+.seperator {
+    color: rgb(190, 190, 190);
+    font-size: 20px;
+    user-select: none;
+    padding: 0 8px;
+}
+
+.handle {
+    cursor: pointer;
+    fill: white;
+    stroke: rgb(0, 0, 0);
+}
+
+.handle:hover {
+    fill: rgb(220, 220, 220);
+}
+
+#boundingBox,
+#transformBox {
+    fill: none;
+    stroke: rgb(0, 0, 0);
+}
+
+#editTable {
+    position: absolute;
+    width: 250px;
+    background: white;
+    border-radius: 3px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#editTable:hover {
+    border: 999px rgba(0, 0, 0, 0.5);
+}
+
+#imgUpload {
+    position: absolute;
+    display: none;
+    width: 200px;
+    height: 100px;
+    margin-top: 50px;
+}
+
+.attEdit,
+#objIn {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px;
+    padding-left: 8px;
+    font-size: 12px;
+    border: 0.5px solid rgb(200, 200, 200);
+    border-radius: 3px;
+    outline: none;
+}
+
+#objIn {
+    flex-direction: column;
+    align-content: center;
+    background: white;
+    position: absolute;
+    width: 132.5px;
+}
+
+button {
+    height: 20px;
+    width: fit-content;
+    margin: 5px;
+    margin-left: 46.25px;
+    background: white;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+}
+
+button:hover {
+    background: rgb(160, 160, 160);
+    color: white;
+    border: 1px solid rgb(80, 80, 80);
+}
+
+button:active {
+    background: rgb(100, 100, 100);
+}
+
+.attribute,
+#typeIn,
+#innerTextIn,
+#attrIn,
+#tempIn {
+    width: 125px;
+    min-height: 17px;
+    max-height: 200px;
+    overflow: auto;
+    outline: none;
+    border: 0.25px solid rgb(200, 200, 200);
+    border-radius: 3px;
+    padding-top: 2px;
+    margin-bottom: 5px;
+}
+
+#toolBar,
+#sceneMenu,
+#presentMenu {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%);
+    width: auto;
+    max-width: 90%;
+    height: 46px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    padding-top: 2px;
+    background: white;
+    animation: fadeAll 0.5s;
+    transition: all 0.5s;
+}
+
+#sceneMenu {
+    top: calc(100% - 54px);
+    left: 3%;
+    transform: none;
+    max-width: 14%;
+}
+
+#extensionMenu {
+    position: absolute;
+    top: 7%;
+    right: 0%;
+    width: 46px;
+    height: auto;
+    max-height: 84%;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-right: 6px;
+    padding-left: 2px;
+    background: white;
+    animation: fadeAll 0.5s;
+    transition: all 0.5s;
+}
+
+#presentMenu {
+    top: calc(100% - 54px);
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#animClock {
+    position: absolute;
+    bottom: 64px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 60px;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    color: rgb(110, 110, 110);
+    padding: 4px;
+}
+
+#container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: 0%;
+    left: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#workingArea {
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 10%;
+    min-height: 10%;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 2px;
+    resize: both;
+    overflow: hidden;
+}
+
+#xyDisplay {
+    position: absolute;
+    bottom: 0%;
+    right: 68px;
+    padding: 0px 8px;
+    background: rgb(255, 255, 255);
+    opacity: 0.5;
+    border: 1px solid rgb(190, 190, 190);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    height: 24px;
+    font-size: 14px;
+    padding-top: 8px;
+    user-select: none;
+}
+
+#xyDisplay:hover {
+    z-index: 9999;
+    opacity: 1;
+    cursor: pointer;
+}
+
+#colorPallete {
+    position: relative;
+    z-index: 1000;
+    margin-top: 42px;
+    padding-bottom: 0.5%;
+    width: 10%;
+    display: none;
+    background: rgb(255, 255, 255);
+    border: 2px solid rgb(220, 220, 220);
+    border-radius: 10px;
+    min-width: 100px;
+    animation: fadeAll 0.3s;
+    transition: all 0.5s;
+}
+
+#globalPallete {
+    position: absolute;
+    left: 0;
+    bottom: 2.5%;
+    height: 95%;
+    width: 1.5%;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    animation: fadeAll 0.5s;
+    transition: all 0.5s;
+}
+
+#rgbValue {
+    padding-top: 2%;
+    height: 15%;
+    border: 1px solid rgb(209, 208, 208);
+    width: 85%;
+    font-size: 70%;
+    color: rgb(0, 0, 0);
+    outline: none;
+    border-radius: 8px;
+    margin-left: 7.5%;
+}
+
+#red,
+#blue,
+#green,
+#strokeWidth,
+#alpha {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    background: white;
+    border: 1px solid rgb(200, 200, 200);
+    height: 5px;
+    width: 80%;
+    border-radius: 2.5px;
+}
+
+#strokeWidth {
+    margin-top: 13%;
+    width: 80%;
+    height: 3px;
+    margin-bottom: -28%;
+}
+
+#strokes {
+    font-size: 14px;
+    height: 80%;
+    width: 42px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
+    border-top: none;
+}
+
+#red:hover,
+#blue:hover,
+#green:hover,
+#strokeWidth:hover,
+#alpha:hover {
+    cursor: pointer;
+}
+
+#red:hover {
+    background-color: rgb(250, 220, 220);
+}
+
+#blue:hover {
+    background-color: rgb(220, 220, 250);
+}
+
+#green:hover {
+    background-color: rgb(220, 250, 220);
+}
+
+#alpha:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+#red::-webkit-slider-thumb,
+#blue::-webkit-slider-thumb,
+#green::-webkit-slider-thumb,
+#strokeWidth::-webkit-slider-thumb,
+#alpha::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 6px;
+}
+
+#red::-webkit-slider-thumb {
+    background-color: red;
+}
+
+#blue::-webkit-slider-thumb {
+    background-color: blue;
+}
+
+#green::-webkit-slider-thumb {
+    background-color: green;
+}
+
+#strokeWidth::-webkit-slider-thumb {
+    background-color: rgb(160, 160, 160);
+}
+
+#alpha::-webkit-slider-thumb {
+    background-color: rgb(150, 150, 150);
+}
+
+.icon,
+.drawIcon,
+.exIcon {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 5px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    margin: 2px;
+    user-select: none;
+    padding: 0;
+    background: white;
+}
+
+#modeIcon {
+    position: absolute;
+    right: 1.5%;
+    bottom: 1.5%;
+}
+
+#settingsIcon {
+    position: absolute;
+    right: 1.5%;
+    bottom: calc(1.5% + 32px);
+}
+
+.icon:hover,
+.drawIcon:hover,
+.exIcon:hover {
+    cursor: pointer;
+    background: rgb(250, 245, 230);
+}
+
+.drawIcon:active,
+.exIcon:active {
+    animation: fade 0.15s;
+}
+
+#timeline {
+    position: absolute;
+    bottom: 0;
+    left: 18%;
+    border: 1px solid rgb(90, 90, 90);
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    width: 65%;
+    height: 20%;
+    top: 80%;
+    overflow: hidden;
+    transition: all 0.5s;
+}
+
+.msgBox {
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    border-radius: 8px;
+    font-size: 12px;
+    padding: 0 8px;
+    position: absolute;
+    z-index: 99999999;
+    transition: all ease-in-out 0.25s;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeAll {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
