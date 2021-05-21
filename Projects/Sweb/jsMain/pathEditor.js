@@ -4,21 +4,28 @@ var activeDataIndex = null;
 var activeDataLen = null;
 var activePathDataAttr = null;
 var originalPathData = null;
+var activePathTransform = null;
 
-var handle = document.createElementNS(ns, 'ellipse');
-handle.setAttribute('fill', 'white');
-handle.setAttribute('stroke-width', 1 / svgUnits);
-handle.setAttribute('stroke', 'black');
-handle.setAttribute('cx', 0);
-handle.setAttribute('cy', 0);
-handle.setAttribute('rx', 5 / svgUnits);
-handle.setAttribute('id', 'pathHandle');
+var pathEditorHandle = document.createElementNS(ns, 'ellipse');
+pathEditorHandle.setAttribute('fill', 'white');
+pathEditorHandle.setAttribute('stroke-width', 1 / svgUnits);
+pathEditorHandle.setAttribute('stroke', 'black');
+pathEditorHandle.setAttribute('cx', 0);
+pathEditorHandle.setAttribute('cy', 0);
+pathEditorHandle.setAttribute('rx', 5 / svgUnits);
+pathEditorHandle.setAttribute('id', 'pathHandle');
+
+const getScreenPoint = (point, matrix) => {
+    var x = parseFloat(point[0]);
+    var y = parseFloat(point[1]);
+    return [(matrix.a * x + matrix.c * y + matrix.e) / svgUnits,
+        (matrix.b * x + matrix.d * y + matrix.f) / svgUnits
+    ];
+};
 
 const drawPtHandle = (point) => {
     var pt = point[0].split(' ');
-    var x = parseFloat(pt[0]);
-    var y = parseFloat(pt[1]);
-    var pHandle = addObject('use', { 'href': '#pathHandle', 'x': x, 'y': y, 'class': 'handle' });
+    var pHandle = addObject('use', { 'href': '#pathHandle', 'x': pt[0], 'y': pt[1], 'class': 'handle' });
     pHandle.addEventListener('click', () => {
         if (activePathHandle) {
             activePathHandle = null;
@@ -35,6 +42,8 @@ const drawPtHandle = (point) => {
 
 const editPath = (path) => {
     activeEditPath = path;
+    activePathTransform = path.getAttribute('transform') || activePathTransform;
+    activeEditPath.removeAttribute('transform');
     removeById('pathHandle');
     Array.from(svg.getElementsByClassName('handle')).forEach((x) => { x.remove(); });
     removeById('pathTangents');
@@ -48,18 +57,19 @@ const editPath = (path) => {
         openActionMsg(`Active Tool: Edit Path`, null);
         var points = [...data.matchAll(/[\d. ]+/g)];
         // console.log(points);    
-        if (activePathDataAttr == 'd' && !data.match('A')) {
+
+        if (!data.match('A')) {
             addObject('polyline', {
-                'fill': 'none',
+                'points': data.replaceAll(/[A-Z]/g, ''),
+                'stroke': 'rgb(190, 190, 190)',
                 'stroke-width': 1 / svgUnits,
-                'stroke': 'rgb(180, 180, 180)',
-                'points': data.replaceAll(/[A-Z]/g, ' '),
+                'fill': 'none',
                 'id': 'pathTangents'
             });
         };
 
-        svg.append(handle);
-        pushToDefs(handle);
+        svg.append(pathEditorHandle);
+        pushToDefs(pathEditorHandle);
 
         points.forEach((point) => {
             if (data[point.index - 2] != 'A' && point[0].split(' ').length == 2) {
@@ -83,6 +93,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key == 'Escape') {
         if (activeEditPath) {
             activeEditPath.setAttribute(activePathDataAttr, originalPathData);
+            activeEditPath.setAttribute('transform', activePathTransform || '');
         };
         originalPathData = null;
         activeEditPath = null;

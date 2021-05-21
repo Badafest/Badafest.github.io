@@ -549,3 +549,7 @@ var svg = document.getElementById('svg');
 fillGlobalPallete();
 minorGridIcon.click();
 majorGridIcon.click();
+
+window.onbeforeunload = function() {
+    return "";
+}

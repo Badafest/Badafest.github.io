@@ -23,24 +23,6 @@ const updateSvgHistory = (latestSvg) => {
     };
 };
 
-setInterval(() => {
-    if (historyPosition != 1) {
-        return 0;
-    };
-    var latestSvg = document.createElementNS(ns, 'svg');
-    svg.getAttributeNames().forEach((x) => {
-        latestSvg.setAttribute(x, svg.getAttribute(x));
-    });
-    svg.childNodes.forEach((x) => {
-        if (['boundingBox', 'transformBox', 'tempObj', 'transHandle', 'rotHandle', 'scaleHandle', 'skewXHandle', 'skewYHandle'].indexOf(x.id) == -1) {
-            latestSvg.append(x.cloneNode(true));
-        };
-    });
-    latestSvg.setAttribute('canvasWidth', `${workingArea.clientWidth}px`);
-    latestSvg.setAttribute('canvasHeight', `${workingArea.clientHeight}px`);
-    updateSvgHistory(latestSvg);
-}, 50);
-
 document.addEventListener('keydown', (event) => {
     if (event.ctrlKey && activeTool == null) {
         if (event.key == 'z' && svgHistory.length > historyPosition) {
@@ -56,6 +38,22 @@ document.addEventListener('keydown', (event) => {
                 timeLine();
             };
         }
+    } else if (event.key == 'Escape') {
+        if (historyPosition != 1) {
+            return 0;
+        };
+        var latestSvg = document.createElementNS(ns, 'svg');
+        svg.getAttributeNames().forEach((x) => {
+            latestSvg.setAttribute(x, svg.getAttribute(x));
+        });
+        svg.childNodes.forEach((x) => {
+            if (['boundingBox', 'transformBox', 'tempObj', 'transHandle', 'rotHandle', 'scaleHandle', 'skewXHandle', 'skewYHandle'].indexOf(x.id) == -1) {
+                latestSvg.append(x.cloneNode(true));
+            };
+        });
+        latestSvg.setAttribute('canvasWidth', `${workingArea.clientWidth}px`);
+        latestSvg.setAttribute('canvasHeight', `${workingArea.clientHeight}px`);
+        updateSvgHistory(latestSvg);
     }
 });
 
@@ -154,7 +152,6 @@ const svgImg = (format = 'svg') => {
             var t = elemOrg.getAttribute('transform');
             var dx = (elemOrgBBox.x - elemBBox.x + (elemOrgBBox.width - elemBBox.width) / 2) / svgUnits;
             var dy = (elemOrgBBox.y - elemBBox.y + (elemOrgBBox.height - elemBBox.height) / 2) / svgUnits;
-            console.log(dx, dy)
             elemOrg.setAttribute('transform', t ? t + `\ntranslate(${dx},${dy})` : `translate(${dx},${dy})`);
             elemOrg.setAttribute('orgLength', t.length);
             elemCopy.remove();

@@ -151,7 +151,7 @@ button:active {
 
 #extensionMenu {
     position: absolute;
-    top: 7%;
+    top: 60px;
     right: 0%;
     width: 46px;
     height: auto;
@@ -422,7 +422,7 @@ button:active {
     font-size: 12px;
     padding: 0 8px;
     position: absolute;
-    z-index: 99999999;
+    z-index: 999999;
     transition: all ease-in-out 0.25s;
 }
 
