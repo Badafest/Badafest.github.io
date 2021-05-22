@@ -305,6 +305,7 @@ const changeMinorGridSeparation = (separation) => {
     minorGridPattern.setAttribute('width', separation);
     minorGridPattern.setAttribute('height', separation);
     minorGridLines.setAttribute('points', `${separation} 0, 0 0, 0 ${separation}`);
+    changeSvgUnits(20 / separation);
 };
 
 const changeMajorGridSeparation = (separation) => {
@@ -312,6 +313,7 @@ const changeMajorGridSeparation = (separation) => {
     majorGridPattern.setAttribute('width', separation);
     majorGridPattern.setAttribute('height', separation);
     majorGridLines.setAttribute('points', `${separation} 0, 0 0, 0 ${separation}`);
+    changeSvgUnits(200 / separation);
 };
 
 coordinates.addEventListener('click', (event) => {
@@ -481,13 +483,17 @@ resetSvg.addEventListener('click', () => {
 });
 
 workingArea.addEventListener('wheel', (event) => {
+    changeSvgUnits(svgUnits * (1 + event.deltaY / 1000));
+});
+
+const changeSvgUnits = (units) => {
     var svg = document.getElementById('svg');
-    svgUnits = Math.max(0.1, svgUnits + event.deltaY / 500);
+    svgUnits = Math.max(0.0000001, units);
     var viewBox = svg.getAttribute('viewBox').split(' ');
     svg.setAttribute('viewBox', `${viewBox[0]} ${viewBox[1]} ${workingArea.clientWidth/svgUnits} ${workingArea.clientHeight/svgUnits}`);
     document.getElementById('minorGridLines').setAttribute('stroke-width', 0.75 / svgUnits);
     document.getElementById('majorGridLines').setAttribute('stroke-width', 1.5 / svgUnits);
-});
+};
 
 workingArea.addEventListener('mousemove', displayXY);
 

@@ -131,19 +131,19 @@ const openSettingsDB = () => {
     settingsDB.append(document.createElement('hr'));
 
     //maximum history count
-    var hisCntDB = document.createElement('div');
-    hisCntDB.style = 'display:flex; align-items:center; justify-content:space-around; padding:8px; font-size:12px;';
-    var cntIn = document.createElement('input');
-    cntIn.setAttribute('type', 'number');
-    cntIn.setAttribute('min', '10');
-    cntIn.setAttribute('max', '1000');
-    cntIn.setAttribute('value', maxHistory);
-    cntIn.setAttribute('step', '1');
-    cntIn.style = 'margin:0% 4% 0% 4%; height:14px; font-size:12px; padding:2px; width:25%;border:1px solid rgb(110,110,110);'
-    cntIn.innerText = svg.style.background || 'none';
-    hisCntDB.append(document.createTextNode('Max. History Count'));
-    hisCntDB.append(cntIn);
-    settingsDB.append(hisCntDB);
+    var zoomStepDB = document.createElement('div');
+    zoomStepDB.style = 'display:flex; align-items:center; justify-content:space-around; padding:8px; font-size:12px;';
+    var stepIn = document.createElement('input');
+    stepIn.setAttribute('type', 'number');
+    stepIn.setAttribute('min', '10');
+    stepIn.setAttribute('max', '1000');
+    stepIn.setAttribute('value', maxHistory);
+    stepIn.setAttribute('step', '1');
+    stepIn.style = 'margin:0% 4% 0% 4%; height:14px; font-size:12px; padding:2px; width:25%;border:1px solid rgb(110,110,110);'
+    stepIn.innerText = svg.style.background || 'none';
+    zoomStepDB.append(document.createTextNode('Max. History Count'));
+    zoomStepDB.append(stepIn);
+    settingsDB.append(zoomStepDB);
     settingsDB.append(document.createElement('hr'));
 
     var okBtn = document.createElement('button');
@@ -170,7 +170,7 @@ const openSettingsDB = () => {
             'minCol': minColIn.innerText,
             'majCol': majColIn.innerText,
             'scnCng': scnIn.checked ? 'auto' : 'manual',
-            'maxHistory': cntIn.value,
+            'maxHistory': stepIn.value,
             'jpegQuality': jpegQualityIn.innerText,
             'vidMethod': vmIn.checked,
             'smoothFreePathVal': smoothFreePathValIn.innerText,

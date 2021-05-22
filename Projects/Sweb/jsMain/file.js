@@ -39,9 +39,6 @@ document.addEventListener('keydown', (event) => {
             };
         }
     } else if (event.key == 'Escape') {
-        if (historyPosition != 1) {
-            return 0;
-        };
         var latestSvg = document.createElementNS(ns, 'svg');
         svg.getAttributeNames().forEach((x) => {
             latestSvg.setAttribute(x, svg.getAttribute(x));
