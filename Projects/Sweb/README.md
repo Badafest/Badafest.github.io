@@ -17,7 +17,7 @@ This is a svg editor, I developed as my first *JS* project. It can be downloaded
     + [Python](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_loc)
     + [NodeJS](https://jasonwatmore.com/post/2016/06/22/nodejs-setup-simple-http-server-local-web-server)
     + [Xampp](https://www.apachefriends.org/download.html)
-++ Or any other method
++ Or any other method
 + Start server serving downloaded Sweb folder as root
 
 ##### Run online
