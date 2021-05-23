@@ -100,8 +100,8 @@ addToolTip(document.getElementById('addObject'), 'Add Any SVG Object<br><a style
 addToolTip(document.getElementById('attPainter'), 'Paint Attributes<br>[Click on source and then on destinations]<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/Presentation">Online Help</a>');
 
 addToolTip(document.getElementById('animateProperty'), 'Add Attribute Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animate">Online Help</a>');
-addToolTip(document.getElementById('animateTransform'), 'Add Attribute Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animatetransform">Online Help</a>');
-addToolTip(document.getElementById('animateMotion'), 'Add Attribute Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animatemotion">Online Help</a>');
+addToolTip(document.getElementById('animateTransform'), 'Add Transform Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animatetransform">Online Help</a>');
+addToolTip(document.getElementById('animateMotion'), 'Add Motion Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animatemotion">Online Help</a>');
 addToolTip(document.getElementById('viewTimeline'), 'Open Timeline<br>[To edit animations, export frames and video]');
 addToolTip(document.getElementById('exportVideo'), 'Export Video of All Scenes<br>[May use FFMPEG]');
 

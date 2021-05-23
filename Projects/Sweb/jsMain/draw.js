@@ -789,6 +789,7 @@ document.addEventListener('keydown', (event) => {
         freePathPoints = [];
         gObjs = [];
         stopWaitForPoint();
+        Array.from(document.getElementsByClassName('msgBox')).forEach((x) => { x.remove(); })
         openActionMsg(`Active Tool: Null`);
     } else if (activeTool == 'group' && event.key == 'Enter') {
         groupItems(gObjs);

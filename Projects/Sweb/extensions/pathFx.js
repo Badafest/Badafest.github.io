@@ -1,3 +1,5 @@
+var refObj = null;
+
 (() => {
     const alignIcon = document.createElement('div');
     alignIcon.setAttribute('class', 'exIcon');
@@ -21,7 +23,6 @@
 
     alignIcon.addEventListener('click', (evt) => {
         pressEsc();
-        var refObj = null;
         activeTool = 'align';
         openActionMsg('Active Tool: Align', null);
         removeById('alignDB');
@@ -116,7 +117,6 @@
 
     snapIcon.addEventListener('click', (evt) => {
         pressEsc();
-        var refObj = null;
         activeTool = 'snap';
         openActionMsg('Active Tool: Snap', null);
         removeById('snapDB');
@@ -189,7 +189,6 @@
 
     arrayIcon.addEventListener('click', (evt) => {
         pressEsc();
-        var refObj = null;
         activeTool = 'array';
         openActionMsg('Active Tool: Array', null);
         removeById('arrayDB');
@@ -239,8 +238,95 @@
     });
 })();
 
+(() => {
+    const maskIcon = document.createElement('div');
+    maskIcon.setAttribute('class', 'exIcon');
+
+    const maskIconSvg = document.createElementNS(ns, 'svg');
+    maskIconSvg.setAttribute('viewBox', '0 0 1 1');
+    maskIconSvg.setAttribute('width', '100%');
+    maskIconSvg.setAttribute('height', '100%');
+
+    const maskPath = document.createElementNS(ns, 'path');
+    maskPath.setAttribute('fill', 'rgb(220,220,220)');
+    maskPath.setAttribute('stroke', 'rgb(90,90,90)');
+    maskPath.setAttribute('stroke-width', '0.05');
+    maskPath.setAttribute('fill-rule', 'evenodd');
+    maskPath.setAttribute('d', 'M 0.2 0.2 0.8 0.2 0.8 0.8 0.2 0.8 z M 0.4 0.4 0.6 0.4 0.6 0.6 0.4 0.6 z');
+
+    maskIconSvg.append(maskPath);
+    maskIcon.append(maskIconSvg);
+    document.getElementById('extensionMenu').append(maskIcon);
+
+    addToolTip(maskIcon, 'Mask', 'left');
+
+    maskIcon.addEventListener('click', () => {
+        pressEsc();
+        activeTool = 'mask';
+        openActionMsg('Active Tool: Mask', null);
+
+        Array.from(svg.childNodes).filter((x) => { return ['defs', 'style'].indexOf(x.tagName) == -1 && ['minorGrid', 'majorGrid'].indexOf(x.id) == -1 }).forEach((x) => {
+            x.addEventListener('click', () => {
+                if (activeTool == 'mask') {
+                    if (refObj && x != refObj) {
+                        maskOnPath(x, refObj);
+                        refObj = null;
+                    } else {
+                        refObj = x;
+                    };
+                };
+            });
+        });
+
+        bBoxReqdTools.push('mask');
+    });
+})();
+
+(() => {
+    const mergeIcon = document.createElement('div');
+    mergeIcon.setAttribute('class', 'exIcon');
+
+    const mergeIconSvg = document.createElementNS(ns, 'svg');
+    mergeIconSvg.setAttribute('viewBox', '0 0 1 1');
+    mergeIconSvg.setAttribute('width', '100%');
+    mergeIconSvg.setAttribute('height', '100%');
+
+    const mergePath = document.createElementNS(ns, 'path');
+    mergePath.setAttribute('fill', 'white');
+    mergePath.setAttribute('stroke', 'rgb(90,90,90)');
+    mergePath.setAttribute('stroke-width', '0.05');
+    mergePath.setAttribute('d', 'M 0.1 0.1 A 0.4 0.4 0 0 0 0.9 0.1 A 0.4 0.4 0 0 0.9 0.9 A 0.4 0.4 0 0 0 0.1 0.9 A 0.4 0.4 0 0 0 0.1 0.1');
+
+    mergeIconSvg.append(mergePath);
+    mergeIcon.append(mergeIconSvg);
+    document.getElementById('extensionMenu').append(mergeIcon);
+
+    addToolTip(mergeIcon, 'Merge', 'left');
+
+    mergeIcon.addEventListener('click', () => {
+        pressEsc();
+        activeTool = 'merge';
+        openActionMsg('Active Tool: Merge', null);
+
+        Array.from(svg.childNodes).filter((x) => { return ['defs', 'style'].indexOf(x.tagName) == -1 && ['minorGrid', 'majorGrid'].indexOf(x.id) == -1 }).forEach((x) => {
+            x.addEventListener('click', () => {
+                if (activeTool == 'merge') {
+                    if (refObj && x != refObj) {
+                        mergePaths(x, refObj);
+                    } else {
+                        refObj = x;
+                    };
+                };
+            });
+        });
+
+        bBoxReqdTools.push('merge');
+    });
+})();
+
 document.addEventListener('keydown', (e) => {
     if (e.key = 'Escape') {
+        refObj = null;
         removeById('alignDB');
         removeById('snapDB');
         removeById('arrayDB');
@@ -306,5 +392,54 @@ const arrayOverPath = (obj, path, no = 10, closed = 'auto') => {
             var pt = path.getPointAtLength(i).matrixTransform(m);
             addObject('use', { 'href': href, 'x': (pt.x - pt0.x) / svgUnits, 'y': (pt.y - pt0.y) / svgUnits });
         };
+    };
+};
+
+const maskOnPath = (obj, ref) => {
+    var maskObj = document.createElementNS(ns, 'mask');
+    var maskObjid = `mask${Math.round(Math.random()*1000)}`;
+    maskObj.id = maskObjid;
+    maskObj.append(ref);
+    pushToDefs(maskObj);
+    obj.setAttribute('mask', `url(#${maskObjid})`);
+};
+
+
+const getScreenPoint = (point, matrix) => {
+    var x = parseFloat(point[0]);
+    var y = parseFloat(point[1]);
+    var origin = svg.getAttribute('viewBox').split(' ');
+    return [(matrix.a * x + matrix.c * y + matrix.e) / svgUnits + parseFloat(origin[0]),
+        (matrix.b * x + matrix.d * y + matrix.f) / svgUnits + parseFloat(origin[1])
+    ];
+};
+
+const mergePaths = (obj, ref) => {
+    var TdObj = obj.getAttribute('d');
+    var dRef = ref.getAttribute('d');
+    if (dRef && TdObj) {
+        var m = obj.getCTM();
+        var points = [...TdObj.matchAll(/[A-Z]\s?[0-9|\s|.]+/g)];
+        console.log(points);
+        var dObj = '';
+        for (x in points) {
+            var pt = points[x];
+            var ptList = pt[0].slice(1).split(/\s/).map((x) => { return parseFloat(x) }).filter((x) => { return x == 0 || x });
+            console.log(ptList);
+            var outPtList = [];
+            if (ptList.length % 2 == 0) {
+                for (i = 0; i < ptList.length; i += 2) {
+                    outPtList.push(getScreenPoint([ptList[i], ptList[i + 1]], m).join(' '));
+                }
+            } else if (ptList.length == 7) {
+                outPtList = [ptList.slice(0, 2).join(' '), ptList.slice(2, 5).join(' '), getScreenPoint([ptList[5], ptList[6]], m).join(' ')];
+            }
+            console.log(outPtList);
+            var index = pt.index;
+            dObj += pt[0][0] + '\n' + outPtList.join('\n') + '\n' + TdObj.slice(index + pt[0].length, index + pt[0].length + points[x + 1] ? points[x + 1].index : 0);
+        };
+
+        ref.setAttribute('d', `${dRef}\n${dObj}`);
+        obj.remove();
     };
 };

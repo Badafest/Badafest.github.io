@@ -15,14 +15,6 @@ pathEditorHandle.setAttribute('cy', 0);
 pathEditorHandle.setAttribute('rx', 5 / svgUnits);
 pathEditorHandle.setAttribute('id', 'pathHandle');
 
-const getScreenPoint = (point, matrix) => {
-    var x = parseFloat(point[0]);
-    var y = parseFloat(point[1]);
-    return [(matrix.a * x + matrix.c * y + matrix.e) / svgUnits,
-        (matrix.b * x + matrix.d * y + matrix.f) / svgUnits
-    ];
-};
-
 const drawPtHandle = (point) => {
     var pt = point[0].split(' ');
     var pHandle = addObject('use', { 'href': '#pathHandle', 'x': pt[0], 'y': pt[1], 'class': 'handle' });
