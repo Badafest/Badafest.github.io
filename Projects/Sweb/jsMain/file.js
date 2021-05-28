@@ -55,6 +55,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 saveSvgIcon.addEventListener('click', () => {
+    pressEsc();
     svg.setAttribute('canvasWidth', `${workingArea.clientWidth}px`);
     svg.setAttribute('canvasHeight', `${workingArea.clientHeight}px`);
     var fReader = new FileReader();
@@ -66,6 +67,7 @@ saveSvgIcon.addEventListener('click', () => {
 });
 
 savePngIcon.addEventListener('click', (event) => {
+    pressEsc();
     removeById('objIn');
     var imgDB = document.createElement('div');
     imgDB.id = 'objIn';
@@ -101,6 +103,7 @@ savePngIcon.addEventListener('click', (event) => {
 });
 
 openSvgIcon.addEventListener('click', () => {
+    pressEsc();
     if (confirm('Unsaved content will be lost. Do you wish to continue?')) {
         var svgUpload = document.createElement('input');
         svgUpload.type = 'file';

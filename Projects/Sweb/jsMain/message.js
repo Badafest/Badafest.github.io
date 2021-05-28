@@ -79,7 +79,7 @@ addToolTip(document.getElementById('fonts'), 'Default Font');
 
 addToolTip(document.getElementById('majorGrids'), 'Toggle Major Grid On/Off');
 addToolTip(document.getElementById('minorGrids'), 'Toggle Minor Grid On/Off');
-addToolTip(document.getElementById('resetSvg'), 'Reset to Default Zoom');
+addToolTip(document.getElementById('resetSvg'), 'Zoom Extents');
 
 addToolTip(document.getElementById('select'), 'Discard Active Tool');
 addToolTip(document.getElementById('group'), 'Group [Select+Enter]<br>Ungroup [Ctrl+Click]<br><a style="color:white"  target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g">Online Help</a>');

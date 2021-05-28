@@ -256,5 +256,6 @@ const openCodeEditor = () => {
 };
 
 document.getElementById('settingsIcon').addEventListener('click', () => {
+    pressEsc();
     openSettingsDB();
 });

@@ -55,6 +55,10 @@ const openFrameWindow = (title, width = defaultImgWidth, height = defaultImgHeig
 
 var recorder;
 const canvasRecordedVideo = (framesArray, width, height, fps) => {
+    if (framesArray.length < 10) {
+        openActionMsg('Too less frames');
+        return 0;
+    }
     Frames = [];
     var vidCanvas = document.createElement('canvas');
     var overLay = document.createElement('div');
@@ -84,6 +88,8 @@ const canvasRecordedVideo = (framesArray, width, height, fps) => {
     warning.append(timeLeft);
 
     document.body.append(overLay);
+    vidCanvas.id = 'vidCanvas';
+    overLay.id = 'vidOverlay';
 
     vidCanvas.setAttribute('width', width);
     vidCanvas.setAttribute('height', height);
@@ -118,8 +124,6 @@ const canvasRecordedVideo = (framesArray, width, height, fps) => {
 
     anim();
     recorder.start();
-    vidCanvas.id = 'vidCanvas';
-    overLay.id = 'vidOverlay'
 };
 
 const ffmpegEncodedVideo = (framesArray, width, height, fps) => {

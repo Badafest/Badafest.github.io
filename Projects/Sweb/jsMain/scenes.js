@@ -48,6 +48,7 @@ document.getElementById('presentMenu').addEventListener('mouseleave', () => {
 });
 
 document.getElementById('modeIcon').addEventListener('click', () => {
+    pressEsc();
     stopAllAnimations();
     animPauseTime = 0;
     clearInterval(animClockPlay);

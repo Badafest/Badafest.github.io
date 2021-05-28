@@ -463,36 +463,39 @@ majorGridIcon.addEventListener('click', () => {
 
 resetSvg.addEventListener('click', () => {
     console.clear();
-    svg = document.getElementById('svg');
-    svgUnits = 2;
-    svg.setAttribute('viewBox', `0 0 ${workingArea.clientWidth/svgUnits} ${workingArea.clientHeight/svgUnits}`);
-    document.getElementById('minorGridLines').setAttribute('stroke-width', 0.75 / svgUnits);
-    document.getElementById('majorGridLines').setAttribute('stroke-width', 1.5 / svgUnits);
-    minorGrid.setAttribute('x', 0);
-    majorGrid.setAttribute('x', 0);
-    minorGrid.setAttribute('y', 0);
-    majorGrid.setAttribute('y', 0);
-    changeMajorGridSeparation(100);
-    changeMinorGridSeparation(10);
-    svg.childNodes.forEach((x) => {
-        if (['defs', 'style'].indexOf(x.tagName) == -1 && ['majorGrid', 'minorGrid'].indexOf(x.id) == -1) {
-            if (x.getBBox().width == 0 && x.getBBox().height == 0) { x.remove(); }
-        }
-    })
-    openActionMsg(`Grids and Zoom Reset`);
+    pressEsc();
+    var svg = document.getElementById('svg');
+    var tempGroup = groupItems(Array.from(svg.childNodes).filter((x) => { return ['majorGrid', 'minorGrid'].indexOf(x.id) == -1 && ['defs', 'style'].indexOf(x.tagName) == -1 }));
+    var bBox = tempGroup.getBoundingClientRect();
+    var newUnits = bBox.height || bBox.width ? svgUnits * Math.min(workingArea.clientWidth / bBox.width, workingArea.clientHeight / bBox.height) : 2;
+    var panX = bBox.width ? bBox.x - (window.innerWidth - bBox.width) / 2 : 0;
+    var panY = bBox.height ? bBox.y - (window.innerHeight - bBox.height) / 2 : 0;
+    ungroupItems(tempGroup);
+    changeSvgUnits(newUnits, panX / newUnits, panY / newUnits);
+    resetSvg.click();
 });
 
 workingArea.addEventListener('wheel', (event) => {
-    changeSvgUnits(svgUnits * (1 + event.deltaY / 1000));
+    var sf = 1 - event.deltaY / 1000;
+    var bBox = svg.getBoundingClientRect();
+    var panX = ((event.x - bBox.x) * (1 - 1 / sf)) / svgUnits;
+    var panY = ((event.y - bBox.y) * (1 - 1 / sf)) / svgUnits;
+    changeSvgUnits(svgUnits * sf, panX, panY);
 });
 
-const changeSvgUnits = (units) => {
+const changeSvgUnits = (units, panX = null, panY = null) => {
     var svg = document.getElementById('svg');
+    var origin = svg.getAttribute('viewBox').split(' ').slice(0, 2).map(parseFloat);
+    var x0 = origin[0] + (panX || 0);
+    var y0 = origin[1] + (panY || 0);
     svgUnits = Math.max(0.0000001, units);
-    var viewBox = svg.getAttribute('viewBox').split(' ');
-    svg.setAttribute('viewBox', `${viewBox[0]} ${viewBox[1]} ${workingArea.clientWidth/svgUnits} ${workingArea.clientHeight/svgUnits}`);
+    svg.setAttribute('viewBox', `${x0} ${y0} ${workingArea.clientWidth/svgUnits} ${workingArea.clientHeight/svgUnits}`);
     document.getElementById('minorGridLines').setAttribute('stroke-width', 0.75 / svgUnits);
     document.getElementById('majorGridLines').setAttribute('stroke-width', 1.5 / svgUnits);
+    minorGrid.setAttribute('x', x0);
+    majorGrid.setAttribute('x', x0);
+    minorGrid.setAttribute('y', y0);
+    majorGrid.setAttribute('y', y0);
 };
 
 workingArea.addEventListener('mousemove', displayXY);

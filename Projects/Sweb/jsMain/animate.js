@@ -936,8 +936,13 @@ document.getElementById('exportVideo').addEventListener('click', () => {
             framesGenerator(anims, defaultFPS, false, () => { callbackFx(i + 1) });
         } else {
             framesGenerator(anims, defaultFPS, false, () => {
-                openFrameWindow(`FRAMES [${defaultImgWidth} x ${defaultImgHeight} @ ${defaultFPS}]`);
-                vidMethod ? ffmpegEncodedVideo(framesArray, defaultImgWidth, defaultImgHeight, defaultFPS) : canvasRecordedVideo(framesArray, defaultImgWidth, defaultImgHeight, defaultFPS);
+                if (vidMethod) {
+                    openFrameWindow(`FRAMES [${defaultImgWidth} x ${defaultImgHeight} @ ${defaultFPS}]`);
+                    ffmpegEncodedVideo(framesArray, defaultImgWidth, defaultImgHeight, defaultFPS);
+                } else {
+                    canvasRecordedVideo(framesArray, defaultImgWidth, defaultImgHeight, defaultFPS);
+                    openFrameWindow(`FRAMES [${defaultImgWidth} x ${defaultImgHeight} @ ${defaultFPS}]`);
+                };
             });
         };
     };

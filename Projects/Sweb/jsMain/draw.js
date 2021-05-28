@@ -193,7 +193,6 @@ const addObject = (type, attributes, textContent = '') => {
     } else {
         obj.addEventListener('click', (event) => { editObject(event, obj) });
     }
-    obj.style.cursor = 'pointer';
     obj.addEventListener('mouseenter', () => { drawBoundingBox(obj); });
     obj.addEventListener('mouseout', () => { removeById('boundingBox'); });
     return obj;
@@ -397,6 +396,7 @@ workingArea.addEventListener('click', (evt) => {
         var B = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
         drawText(A, B, 'Text');
     } else if (activeTool == 'tex') {
+        removeById('editTable');
         var A = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
         var inputBox = document.createElement('div');
         inputBox.id = 'editTable';
