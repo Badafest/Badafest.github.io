@@ -1,7 +1,6 @@
-var fillColor = [255, 255, 255, 1];
-var strokeColor = [0, 0, 0, 1];
+var fillColor = '#ffffff';
+var strokeColor = '#000000';
 var strokeWidth = 0.5;
-var NO_OF_GCS = 32;
 
 var activeTool = null;
 
@@ -66,23 +65,15 @@ fontIcon.addEventListener('click', (event) => {
     fontBox.append(fontDropDown);
     document.body.append(fontBox);
 
-})
+});
 
 // var toolBar = document.getElementById('toolBar');
 var workingArea = document.getElementById('workingArea');
-var globalPallete = document.getElementById('globalPallete');
 
 var fillColorIcon = document.getElementById('fillColorIcon');
 var strokeColorIcon = document.getElementById('strokeColorIcon');
 var strokeWidthIcon = document.getElementById('strokeWidthIcon');
 var strokeWidthValue = document.getElementById('strokeWidth');
-
-var pallete = document.getElementById('colorPallete');
-var redValue = document.getElementById('red');
-var blueValue = document.getElementById('blue');
-var greenValue = document.getElementById('green');
-var alphaValue = document.getElementById('alpha');
-var rgbValue = document.getElementById('rgbValue');
 
 var minorGridIcon = document.getElementById('minorGrids');
 var majorGridIcon = document.getElementById('majorGrids');
@@ -185,84 +176,15 @@ const removeById = (id) => {
     }
 };
 
-const fillGlobalPallete = (color = null, position = null) => {
-    if (color == null) {
-        // global pallete
-        for (x = 0; x < NO_OF_GCS; x++) {
-            var div = document.createElement('div');
-            div.style.width = '100%';
-            div.style.height = `${100/NO_OF_GCS}%`;
-            div.style.cursor = 'pointer';
-            if (x == 0) {
-                div.style.borderTopRightRadius = '8px';
-            } else if (x == NO_OF_GCS - 1) {
-                div.style.borderBottomRightRadius = '8px';
-            };
-            div.id = `gc${x+1}`;
-            div.style.top = `${(100/NO_OF_GCS)*x}%`;
-            globalPallete.append(div);
-            div.addEventListener('click', (evt) => {
-                removeById('colDiv');
-                var temp = document.createElement('div');
-                temp.innerText = evt.target.style.background;
-                // console.log(temp.value);
-                document.body.append(temp);
-                var range = document.createRange();
-                range.selectNode(temp);
-                window.getSelection().removeAllRanges(); // clear current selection
-                window.getSelection().addRange(range); // to select text
-                document.execCommand("copy");
-                window.getSelection().removeAllRanges(); // to deselect
-                temp.setAttribute('contenteditable', 'true');
-                temp.style = 'position:absolute; height:16px; width:125px; border:1px solid rgb(220,220,220); border-radius:8px; background:white; font-size:12px; outline:none';
-                temp.style.top = `${evt.y}px`;
-                temp.style.left = `${evt.x+12}px`;
-                temp.oninput = (() => {
-                    if (temp.innerText.length > 0) {
-                        evt.target.style.background = temp.innerText;
-                    };
-                });
-                temp.id = 'colDiv';
-            });
-        };
-        var reds, blues, greens;
-        reds = blues = greens = Math.floor(NO_OF_GCS / 4);
-        for (x = 1; x <= reds; x++) {
-            var mainValue = 100 + (155 * ((x - 1) / (reds - 1)));
-            var otherValue = Math.round((255 - mainValue) / 2);
-            document.getElementById(`gc${x}`).style.background = getColor([mainValue, otherValue, otherValue, 1]);
-        };
-        for (x = 1; x <= greens; x++) {
-            var mainValue = 100 + (155 * ((x - 1) / (greens - 1)));
-            var otherValue = Math.round((255 - mainValue) / 2);
-            document.getElementById(`gc${x+reds}`).style.background = getColor([otherValue, mainValue, otherValue, 1]);
-        };
-        for (x = 1; x <= blues; x++) {
-            var mainValue = 100 + (155 * ((x - 1) / (blues - 1)));
-            var otherValue = Math.round((255 - mainValue) / 2);
-            document.getElementById(`gc${x+reds+greens}`).style.background = getColor([otherValue, otherValue, mainValue, 1]);
-        };
-        for (x = 1; x <= NO_OF_GCS - 3 * reds; x++) {
-            var mainValue = 100 + (155 * ((x - 1) / (blues - 1)));
-            document.getElementById(`gc${x+reds+greens+blues}`).style.background = getColor([mainValue, mainValue, mainValue, 1]);
-        };
-        document.getElementById(`gc${NO_OF_GCS}`).style.background = 'rgba(0,0,0,0)';
-    } else {
-        document.getElementById(`gc${position}`).style.background = color;
-    }
-};
-
-const getColor = (fillColor) => `rgba(${fillColor[0]},${fillColor[1]},${fillColor[2]},${fillColor[3]})`;
-
 const changeFillColor = (newColor) => {
     fillColor = newColor;
-    fillColorIcon.style.backgroundColor = getColor(fillColor);
+    fillColorIcon.value = newColor;
     openActionMsg(`Fill Color: ${newColor}`);
 }
 
 const changeStrokeColor = (newColor) => {
     strokeColor = newColor;
-    strokeColorIcon.style.backgroundColor = getColor(strokeColor);
+    strokeColorIcon.value = newColor;
     openActionMsg(`Stroke Color: ${newColor}`);
 }
 
@@ -290,13 +212,15 @@ const moveXY = (moveXYBool, event) => {
         var viewBox = svg.getAttribute('viewBox').split(' ');
         var x0 = parseFloat(viewBox[0]) - deltaX;
         var y0 = parseFloat(viewBox[1]) - deltaY;
-        svg.setAttribute('viewBox', `${x0} ${y0} ${viewBox[2]} ${viewBox[3]}`);
-        minorGrid.setAttribute('x', x0);
-        majorGrid.setAttribute('x', x0);
-        minorGrid.setAttribute('y', y0);
-        majorGrid.setAttribute('y', y0);
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        if (x0 > -1e6 && y0 > -1e6) {
+            svg.setAttribute('viewBox', `${x0} ${y0} ${viewBox[2]} ${viewBox[3]}`);
+            minorGrid.setAttribute('x', x0);
+            majorGrid.setAttribute('x', x0);
+            minorGrid.setAttribute('y', y0);
+            majorGrid.setAttribute('y', y0);
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        };
     }
 };
 
@@ -305,7 +229,6 @@ const changeMinorGridSeparation = (separation) => {
     minorGridPattern.setAttribute('width', separation);
     minorGridPattern.setAttribute('height', separation);
     minorGridLines.setAttribute('points', `${separation} 0, 0 0, 0 ${separation}`);
-    changeSvgUnits(20 / separation);
 };
 
 const changeMajorGridSeparation = (separation) => {
@@ -313,7 +236,6 @@ const changeMajorGridSeparation = (separation) => {
     majorGridPattern.setAttribute('width', separation);
     majorGridPattern.setAttribute('height', separation);
     majorGridLines.setAttribute('points', `${separation} 0, 0 0, 0 ${separation}`);
-    changeSvgUnits(200 / separation);
 };
 
 coordinates.addEventListener('click', (event) => {
@@ -361,69 +283,11 @@ strokeWidthValue.oninput = () => {
     openActionMsg(`Stroke Width: ${strokeWidth}`);
 };
 
-fillColorIcon.addEventListener('click', (event) => {
-    pallete.style.left = `calc(${event.x}px - 5%)`;
-    pallete.style.display = 'block';
-    redValue.value = fillColor[0];
-    greenValue.value = fillColor[1];
-    blueValue.value = fillColor[2];
-    alphaValue.value = fillColor[3];
-    rgbValue.innerHTML = `rgba(${fillColor})`;
+fillColorIcon.oninput = () => { changeFillColor(fillColorIcon.value) };
 
-    var sliders = [redValue, greenValue, blueValue, alphaValue];
-
-    [0, 1, 2, 3].forEach((x) => {
-        sliders[x].oninput = () => {
-            fillColor[x] = sliders[x].value;
-            rgbValue.innerHTML = `rgba(${fillColor})`;
-            changeFillColor(fillColor);
-        }
-    });
-
-    rgbValue.oninput = () => {
-        var color = rgbValue.innerText.match(/^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)$/i);
-        for (x = 0; x < 4; x++) {
-            if (color[x + 1] != undefined) {
-                sliders[x].value = parseFloat(color[x + 1]);
-                fillColor[x] = parseFloat(color[x + 1]);
-                changeFillColor(fillColor);
-            };
-        };
-    };
-});
-
-strokeColorIcon.addEventListener('click', (event) => {
-    pallete.style.left = `calc(${event.x}px - 5%)`;
-    pallete.style.display = 'block';
-    redValue.value = strokeColor[0];
-    greenValue.value = strokeColor[1];
-    blueValue.value = strokeColor[2];
-    alphaValue.value = strokeColor[3];
-    rgbValue.innerHTML = `rgba(${strokeColor})`;
-
-    var sliders = [redValue, greenValue, blueValue, alphaValue];
-    [0, 1, 2, 3].forEach((x) => {
-        sliders[x].oninput = () => {
-            strokeColor[x] = sliders[x].value;
-            rgbValue.innerHTML = `rgba(${strokeColor})`;
-            changeStrokeColor(strokeColor);
-        }
-    });
-
-    rgbValue.oninput = () => {
-        var color = rgbValue.innerText.match(/^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)$/i);
-        for (x = 0; x < 4; x++) {
-            if (color[x + 1] != undefined) {
-                sliders[x].value = parseFloat(color[x + 1]);
-                strokeColor[x] = parseFloat(color[x + 1]);
-                changeStrokeColor(strokeColor);
-            };
-        };
-    };
-});
+strokeColorIcon.oninput = () => { changeStrokeColor(strokeColorIcon.value) };
 
 workingArea.addEventListener('click', (event) => {
-    pallete.style.display = 'none';
     removeById('minSep');
     removeById('majSep');
     removeById('tempIn');
@@ -476,26 +340,35 @@ resetSvg.addEventListener('click', () => {
 });
 
 workingArea.addEventListener('wheel', (event) => {
-    var sf = 1 - event.deltaY / 1000;
+    var sf = 1 - event.deltaY / 10000;
     var bBox = svg.getBoundingClientRect();
     var panX = ((event.x - bBox.x) * (1 - 1 / sf)) / svgUnits;
     var panY = ((event.y - bBox.y) * (1 - 1 / sf)) / svgUnits;
     changeSvgUnits(svgUnits * sf, panX, panY);
+    if (svgUnits * minorGridSeparation < 10) {
+        changeMinorGridSeparation(minorGridSeparation * 10);
+        changeMajorGridSeparation(majorGridSeparation * 10);
+    } else if (svgUnits * minorGridSeparation > 100) {
+        changeMinorGridSeparation(minorGridSeparation / 10);
+        changeMajorGridSeparation(majorGridSeparation / 10);
+    }
 });
 
 const changeSvgUnits = (units, panX = null, panY = null) => {
-    var svg = document.getElementById('svg');
-    var origin = svg.getAttribute('viewBox').split(' ').slice(0, 2).map(parseFloat);
-    var x0 = origin[0] + (panX || 0);
-    var y0 = origin[1] + (panY || 0);
-    svgUnits = Math.max(0.0000001, units);
-    svg.setAttribute('viewBox', `${x0} ${y0} ${workingArea.clientWidth/svgUnits} ${workingArea.clientHeight/svgUnits}`);
-    document.getElementById('minorGridLines').setAttribute('stroke-width', 0.75 / svgUnits);
-    document.getElementById('majorGridLines').setAttribute('stroke-width', 1.5 / svgUnits);
-    minorGrid.setAttribute('x', x0);
-    majorGrid.setAttribute('x', x0);
-    minorGrid.setAttribute('y', y0);
-    majorGrid.setAttribute('y', y0);
+    if (units > 0.00001 && units < 100000) {
+        var svg = document.getElementById('svg');
+        var origin = svg.getAttribute('viewBox').split(' ').slice(0, 2).map(parseFloat);
+        var x0 = origin[0] + (panX || 0);
+        var y0 = origin[1] + (panY || 0);
+        svgUnits = units;
+        svg.setAttribute('viewBox', `${x0} ${y0} ${workingArea.clientWidth/svgUnits} ${workingArea.clientHeight/svgUnits}`);
+        document.getElementById('minorGridLines').setAttribute('stroke-width', 0.75 / svgUnits);
+        document.getElementById('majorGridLines').setAttribute('stroke-width', 1.5 / svgUnits);
+        minorGrid.setAttribute('x', x0);
+        majorGrid.setAttribute('x', x0);
+        minorGrid.setAttribute('y', y0);
+        majorGrid.setAttribute('y', y0);
+    };
 };
 
 workingArea.addEventListener('mousemove', displayXY);
@@ -526,15 +399,6 @@ const pushToDefs = (obj) => {
     obj.remove();
 };
 
-globalPallete.addEventListener('wheel', (evt) => {
-    for (x = 0; x < NO_OF_GCS; x++) {
-        removeById(`gc${x+1}`);
-    }
-    NO_OF_GCS += evt.deltaY / 100;
-    NO_OF_GCS = NO_OF_GCS < 16 ? 16 : (NO_OF_GCS > 200 ? 200 : NO_OF_GCS);
-    fillGlobalPallete();
-});
-
 const waitForPoint = () => {
     svg.style.cursor = 'crosshair';
     svg.childNodes.forEach((x) => {
@@ -555,10 +419,10 @@ const stopWaitForPoint = () => {
 
 initializeSvg();
 var svg = document.getElementById('svg');
-fillGlobalPallete();
+
 minorGridIcon.click();
 majorGridIcon.click();
 
 window.onbeforeunload = function() {
     return "";
-}
+};

@@ -15,6 +15,22 @@ body {
     background: rgb(252, 252, 252);
 }
 
+input[type='color'] {
+    outline: none;
+    -webkit-appearance: none;
+    border-radius: 5px;
+    padding: 0;
+}
+
+input[type='color']::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type='color']::-webkit-color-swatch {
+    border: none;
+    border-radius: 3px;
+}
+
 .seperator {
     color: rgb(190, 190, 190);
     font-size: 20px;
@@ -251,14 +267,10 @@ button:active {
     transition: all 0.5s;
 }
 
-#globalPallete {
+#pallete {
     position: absolute;
     left: 0;
-    bottom: 2.5%;
-    height: 95%;
-    width: 1.5%;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    height: 100%;
     animation: fadeAll 0.5s;
     transition: all 0.5s;
 }

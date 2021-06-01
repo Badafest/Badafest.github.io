@@ -69,7 +69,7 @@ const openProgressMsg = (msg, per = null) => {
 }
 
 addToolTip(document.getElementById('xyDisplay'), 'Click to change grid separation', 'top');
-addToolTip(document.getElementById('globalPallete'), 'Click to copy or edit color', 'right');
+addToolTip(document.getElementById('pallete'), 'Click = Fill<br>Shift+Click = Stroke', 'right');
 
 addToolTip(document.getElementById('fillColorIcon'), 'Default Fill Color');
 addToolTip(document.getElementById('strokeColorIcon'), 'Default Stroke Color');
@@ -82,26 +82,26 @@ addToolTip(document.getElementById('minorGrids'), 'Toggle Minor Grid On/Off');
 addToolTip(document.getElementById('resetSvg'), 'Zoom Extents');
 
 addToolTip(document.getElementById('select'), 'Discard Active Tool');
-addToolTip(document.getElementById('group'), 'Group [Select+Enter]<br>Ungroup [Ctrl+Click]<br><a style="color:white"  target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g">Online Help</a>');
+addToolTip(document.getElementById('group'), 'Group [Select+Enter]<br>Ungroup [Ctrl+Click]');
 addToolTip(document.getElementById('ccp'), 'Box Select');
-addToolTip(document.getElementById('edit'), 'Interactive Transform<br>[About Center]<br><a style="color:white"  target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">Online Help</a>');
+addToolTip(document.getElementById('edit'), 'Interactive Transform<br>[About Center]');
 
-addToolTip(document.getElementById('drawLine'), 'Draw Polyline<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polyline">Online Help</a>');
-addToolTip(document.getElementById('drawPath'), 'Draw Beizer Path<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path">Online Help</a>');
-addToolTip(document.getElementById('drawArc'), 'Draw Arc<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path">Online Help</a>');
-addToolTip(document.getElementById('drawFree'), 'Draw Freehand Path<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path">Online Help</a>');
-addToolTip(document.getElementById('drawEllipse'), 'Draw Ellipse<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/ellipse">Online Help</a>');
-addToolTip(document.getElementById('drawRect'), 'Draw Rounded Rectangle<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect">Online Help</a>');
-addToolTip(document.getElementById('drawText'), 'Add Text<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text">Online Help</a>');
-addToolTip(document.getElementById('drawTex'), 'Add LaTeX<br>[uses MathJaX]<br><a style="color:white" target="_blank" href="https://www.caam.rice.edu/~heinken/latex/symbols.pdf">Online Help</a>');
-addToolTip(document.getElementById('drawImg'), 'Add Image<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/image">Online Help</a>');
+addToolTip(document.getElementById('drawLine'), 'Draw Polyline');
+addToolTip(document.getElementById('drawPath'), 'Draw Beizer Path');
+addToolTip(document.getElementById('drawArc'), 'Draw Arc');
+addToolTip(document.getElementById('drawFree'), 'Draw Freehand Path');
+addToolTip(document.getElementById('drawEllipse'), 'Draw Ellipse');
+addToolTip(document.getElementById('drawRect'), 'Draw Rounded Rectangle');
+addToolTip(document.getElementById('drawText'), 'Add Text');
+addToolTip(document.getElementById('drawTex'), 'Add LaTeX<br>[uses MathJaX]');
+addToolTip(document.getElementById('drawImg'), 'Add Image');
 
-addToolTip(document.getElementById('addObject'), 'Add Any SVG Object<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element">Online Help</a>');
-addToolTip(document.getElementById('attPainter'), 'Paint Attributes<br>[Click on source and then on destinations]<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/Presentation">Online Help</a>');
+addToolTip(document.getElementById('addObject'), 'Add Any SVG Object');
+addToolTip(document.getElementById('attPainter'), 'Paint Attributes<br>[Click on source and then on destinations]');
 
-addToolTip(document.getElementById('animateProperty'), 'Add Attribute Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animate">Online Help</a>');
-addToolTip(document.getElementById('animateTransform'), 'Add Transform Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animatetransform">Online Help</a>');
-addToolTip(document.getElementById('animateMotion'), 'Add Motion Animation<br><a style="color:white" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animatemotion">Online Help</a>');
+addToolTip(document.getElementById('animateProperty'), 'Add Attribute Animation');
+addToolTip(document.getElementById('animateTransform'), 'Add Transform Animation');
+addToolTip(document.getElementById('animateMotion'), 'Add Motion Animation');
 addToolTip(document.getElementById('viewTimeline'), 'Open Timeline<br>[To edit animations, export frames and video]');
 addToolTip(document.getElementById('exportVideo'), 'Export Video of All Scenes<br>[May use FFMPEG]');
 

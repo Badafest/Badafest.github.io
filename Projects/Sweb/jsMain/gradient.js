@@ -41,13 +41,12 @@ openStopEditDialogBox = (event) => {
     removeById('gradDiagBox');
     removeById('gradDiagEditBox');
     removeById('editTable');
-    pallete.style.display = 'none';
-    var gDB = document.createElementNS(ns, 'svg');
+    var gDB = document.createElement('div');
     gDB.setAttribute('id', 'gradDiagBox');
-    gDB.setAttribute('viewBox', '0 0 100 100');
     gDB.setAttribute('style',
-        `position:absolute; top:${event.y+10}px; left:${event.x}px; width:10%; height:21%; background:white; border:1px solid rgb(190,190,190); border-radius:5px`);
-    var gradBoxMain = document.createElementNS(ns, 'rect');
+        `position:absolute; top:${event.y+10}px; left:${event.x}px; width:200px; height:200px; background:white; border:1px solid rgb(190,190,190); border-radius:5px`);
+    var gradBoxMain = document.createElementNS(ns, 'svg');
+
     var currGrad = currGradient();
     var gradId = `gradient${gradCount}`;
     currGrad.setAttribute('id', gradId);
@@ -55,12 +54,21 @@ openStopEditDialogBox = (event) => {
     if (svg.getElementById(gradId) == undefined || svg.getElementById(gradId) == null) {
         defsMain.append(currGrad);
     };
-    gradBoxMain.setAttribute('fill', `url(#gradient${gradCount})`);
-    gradBoxMain.setAttribute('x', '5');
-    gradBoxMain.setAttribute('y', '5');
-    gradBoxMain.setAttribute('width', '90');
-    gradBoxMain.setAttribute('height', '90');
-    gradBoxMain.setAttribute('rx', '2');
+
+    gradBoxMain.setAttribute('viewBox', '0 0 100 100');
+    gradBoxMain.setAttribute('background', `white`);
+    gradBoxMain.style = 'margin:5%';
+    gradBoxMain.setAttribute('width', '90%');
+    gradBoxMain.setAttribute('height', '90%');
+
+    var gradRect = document.createElementNS(ns, 'rect');
+    gradRect.setAttribute('fill', `url(#gradient${gradCount})`);
+    gradRect.setAttribute('x', '0');
+    gradRect.setAttribute('y', '0');
+    gradRect.setAttribute('width', '100%');
+    gradRect.setAttribute('height', '100%');
+    gradBoxMain.append(gradRect);
+    // gradBoxMain.setAttribute('rx', '2');
 
     var stops = Array.from(currGrad.getElementsByTagName('stop'));
 
@@ -76,17 +84,22 @@ openStopEditDialogBox = (event) => {
         var xEndPer = xStartPer + radPer;
         var yEndPer = yStartPer + radPer;
     }
+
     var gradLine = document.createElementNS(ns, 'line');
     var xStep = (xEndPer - xStartPer) / 100;
     var yStep = (yEndPer - yStartPer) / 100;
-    gradLine.setAttribute('x1', (9 * xStartPer + 50) / 10);
-    gradLine.setAttribute('x2', (9 * xEndPer + 50) / 10);
-    gradLine.setAttribute('y1', (9 * yStartPer + 50) / 10);
-    gradLine.setAttribute('y2', (9 * yEndPer + 50) / 10);
+    gradLine.setAttribute('x1', xStartPer);
+    gradLine.setAttribute('x2', xEndPer);
+    gradLine.setAttribute('y1', yStartPer);
+    gradLine.setAttribute('y2', yEndPer);
+    // gradLine.setAttribute('x1', (9 * xStartPer + 50) / 10);
+    // gradLine.setAttribute('x2', (9 * xEndPer + 50) / 10);
+    // gradLine.setAttribute('y1', (9 * yStartPer + 50) / 10);
+    // gradLine.setAttribute('y2', (9 * yEndPer + 50) / 10);
     gradLine.setAttribute('stroke', 'black');
     gradLine.setAttribute('stroke-width', '2.5');
     gradLine.setAttribute('style', 'cursor:pointer');
-    gDB.append(gradLine);
+    gradBoxMain.append(gradLine);
 
     gradLine.addEventListener('click', (evt) => {
         stops = Array.from(currGrad.getElementsByTagName('stop'));
@@ -123,30 +136,22 @@ openStopEditDialogBox = (event) => {
         reAssignCurrGrad();
     });
 
-    const changeStopColor = (position, color) => {
-        stops[position].style.stopColor = `rgba(${color})`;
-        reAssignCurrGrad();
-    };
-
     const dummyStopFunction = (stop) => {
+        console.log(stop.style.stopColor)
         var offset = parseFloat(stop.getAttribute('offset'));
-        var stopHandle = document.createElementNS(ns, 'rect');
-        stopHandle.setAttribute('width', 6);
-        stopHandle.setAttribute('height', 6);
-        stopHandle.setAttribute('x', (9 * (xStartPer + offset * xStep) + 50) / 10 - 3);
-        stopHandle.setAttribute('y', (9 * (yStartPer + offset * yStep) + 50) / 10 - 3);
-        stopHandle.setAttribute('fill', stop.style.stopColor);
-        stopHandle.setAttribute('stroke', 'black');
-        stopHandle.setAttribute('style', 'cursor:pointer');
+        var stopHandle = document.createElement('input');
+        stopHandle.style = `width:6%;height:6%;position:absolute;border:1px solid black;cursor:pointer`
+        stopHandle.style.left = `${(9 * (xStartPer + offset * xStep) + 50) / 10 - 3}%`;
+        stopHandle.style.top = `${(9 * (yStartPer + offset * yStep) + 50) / 10 - 3}%`;
+        stopHandle.value = getHexColor(stop.style.stopColor);
         stopHandle.setAttribute('id', `stop${stops.indexOf(stop)}`);
         stopHandle.setAttribute('class', 'stopHandle');
+        stopHandle.setAttribute('type', 'color');
         gDB.append(stopHandle);
         stopHandle.addEventListener('click', (event) => {
             if (event.ctrlKey) {
                 var indexStop = parseInt(stopHandle.id.slice(4));
-                console.log(indexStop);
                 if (0 < indexStop && indexStop < (stops.length - 1)) {
-                    console.log(stops.length - 1)
                     stops[indexStop].remove();
                     stops.splice(indexStop, 1);
                     Array.from(gDB.getElementsByClassName('stopHandle')).forEach((stpHndl) => {
@@ -155,43 +160,12 @@ openStopEditDialogBox = (event) => {
                     stops.forEach((stop) => { dummyStopFunction(stop); });
                     reAssignCurrGrad();
                 };
-            } else {
-                var currentColor = stopHandle.getAttribute('fill').match(/^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)$/i).slice(1);
-                if (currentColor[3] == undefined) {
-                    currentColor[3] = 1;
-                };
-                pallete.style.left = `calc(${event.x}px - 5%)`;
-                pallete.style.display = 'block';
-                redValue.value = currentColor[0];
-                greenValue.value = currentColor[1];
-                blueValue.value = currentColor[2];
-                alphaValue.value = currentColor[3];
-                rgbValue.innerHTML = `rgba(${currentColor})`;
-
-                var sliders = [redValue, greenValue, blueValue, alphaValue];
-
-                [0, 1, 2, 3].forEach((x) => {
-                    sliders[x].oninput = () => {
-                        currentColor[x] = sliders[x].value;
-                        rgbValue.innerHTML = `rgba(${currentColor})`;
-                        stopHandle.setAttribute('fill', `rgba(${currentColor})`);
-                        changeStopColor(parseInt(stopHandle.id.slice(4)), currentColor);
-                    }
-                });
-
-                rgbValue.oninput = () => {
-                    var color = rgbValue.innerText.match(/^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)$/i);
-                    for (x = 0; x < 4; x++) {
-                        if (color[x + 1] != undefined) {
-                            sliders[x].value = parseFloat(color[x + 1]);
-                            currentColor[x] = parseFloat(color[x + 1]);
-                        };
-                    };
-                    stopHandle.setAttribute('fill', `rgba(${currentColor})`);
-                    changeStopColor(parseInt(stopHandle.id.slice(4)), currentColor);
-                };
             };
         });
+        stopHandle.oninput = () => {
+            stop.style.stopColor = stopHandle.value;
+            reAssignCurrGrad();
+        }
     }
 
     stops.forEach((stop) => { dummyStopFunction(stop); });
@@ -214,7 +188,6 @@ openGradEditDialogBox = (event) => {
 
     var workingGrad = document.getElementById(gradId);
 
-    pallete.style.display = 'none';
     var gEDB = document.createElement('div');
     gEDB.setAttribute('style',
         `position:absolute; top:${event.y+10}px; left:${event.x}px; width:10%; height:11%; background:white; border:1px solid rgb(190,190,190); border-radius:5px; font-size:14px`);
@@ -305,6 +278,5 @@ document.addEventListener('keydown', (event) => {
     if (event.key == 'Escape') {
         removeById('gradDiagBox');
         removeById('gradDiagEditBox');
-        pallete.style.display = 'none';
     };
 });

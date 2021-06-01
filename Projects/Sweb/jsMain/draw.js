@@ -19,11 +19,11 @@ var groupIcon = document.getElementById('group');
 var gObjs = [];
 
 const getFillColor = () => {
-    return fillColorIcon.style.backgroundColor;
+    return fillColorIcon.value;
 };
 
 const getStrokeColor = () => {
-    return strokeColorIcon.style.backgroundColor;
+    return strokeColorIcon.value;
 };
 
 const getStrokeWidth = () => {
@@ -182,7 +182,9 @@ const addObject = (type, attributes, textContent = '') => {
     obj.setAttribute('stroke', getStrokeColor());
     obj.setAttribute('fill', getFillColor());
     obj.setAttribute('stroke-width', getStrokeWidth());
+    obj.setAttribute('opacity', 1);
     obj.setAttribute('scene', activeScene);
+
     for (x in attributes) {
         obj.setAttribute(x.replaceAll('_', ':'), attributes[x]);
     }
