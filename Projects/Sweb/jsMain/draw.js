@@ -212,14 +212,10 @@ const drawBoundingBox = (obj) => {
     var ymin = (parseFloat(bbox.y) - parseFloat(svgBBox.y) - 10) * strk + parseFloat(origin[1]);
     var height = (parseFloat(bbox.height) + 20) * strk;
     if (bBoxReqdTools.indexOf(activeTool) != -1) {
-        var boundingBox = document.createElementNS(ns, 'rect');
+        var boundingBox = document.createElementNS(ns, 'path');
         boundingBox.id = 'boundingBox';
-        boundingBox.setAttribute('x', `${xmin}`);
-        boundingBox.setAttribute('width', `${width}`);
-        boundingBox.setAttribute('y', `${ymin}`);
-        boundingBox.setAttribute('height', `${height}`);
+        boundingBox.setAttribute('d', `M ${xmin} ${ymin} l ${width} 0 0 ${height} -${width} 0 z M ${xmin + strk*3} ${ymin + strk*3} l ${width - strk*6} 0 0 ${height - strk*6} -${width-strk*6} 0 z`)
         boundingBox.setAttribute('stroke-width', `${strk}`);
-        boundingBox.setAttribute('rx', `${Math.min(width,height)*0.025}`);
         svg.append(boundingBox);
     };
     return boundingBox;
