@@ -57,21 +57,6 @@ const timeLine = () => {
     var paused = true;
     var pauseTime = 0;
     // var animPlay = [];
-    timeLineDiv.addEventListener('wheel', (evt) => {
-        maxSeconds += evt.deltaY / 1000;
-        maxSeconds = maxSeconds < minSeconds + 1 ? minSeconds + 1 : maxSeconds;
-        if (evt.shiftKey) {
-            minSeconds += evt.deltaY / 1000;
-            minSeconds = minSeconds < 0 ? 0 : minSeconds;
-            if (evt.altKey) {
-                minSeconds = Math.round(minSeconds);
-            };
-        };
-        if (evt.altKey) {
-            maxSeconds = Math.max(Math.round(maxSeconds), minSeconds + 1);
-        };
-        timeLine();
-    });
 
     var mediaTools = document.createElement('div');
     var propAnims = document.createElement('div');
@@ -101,6 +86,7 @@ const timeLine = () => {
         };
     });
 
+    var indices = [0, 0, 0]
     animations.forEach((animation) => {
         var beginTime = parseFloat(animation.getAttribute('start'));
         var endTime = beginTime + parseFloat(animation.getAttribute('dur'));
@@ -115,7 +101,7 @@ const timeLine = () => {
         var animHandle = document.createElement('div');
         animHandle.style.position = 'absolute';
         animHandle.style.width = `${((endTime-beginTime)/(maxSeconds-minSeconds))*100}%`;
-        animHandle.style.height = '13%';
+        animHandle.style.height = '16px';
         animHandle.style.left = `${((beginTime-minSeconds)/(maxSeconds-minSeconds))*100}%`;
         animHandle.style.border = '1px solid rgb(200,200,200)';
         animHandle.style.borderRadius = '8px';
@@ -123,14 +109,17 @@ const timeLine = () => {
         animHandle.style.cursor = 'pointer';
 
         if (animation.tagName == 'animate') {
-            animHandle.style.top = '31%';
+            animHandle.style.top = `${3+indices[0]*19}px`;
             propAnims.append(animHandle);
+            indices[0] += 1;
         } else if (animation.tagName == 'animateTransform') {
-            animHandle.style.top = '56%';
+            animHandle.style.top = `${3+indices[1]*19}px`;
             transAnims.append(animHandle);
+            indices[1] += 1;
         } else {
-            animHandle.style.top = '81%';
+            animHandle.style.top = `${3+indices[2]*19}px`;
             motAnims.append(animHandle);
+            indices[2] += 1;
         };
 
         const splineEditorFx = () => {
@@ -290,10 +279,6 @@ const timeLine = () => {
                     removeById('animValueInput');
                     removeById('animSplineEditor');
                     timeLine();
-                } else if (evt.altKey) {
-                    animHandle.parentNode.prepend(animHandle);
-                } else {
-                    animHandle.parentNode.append(animHandle);
                 };
                 removeById('animValueInput');
                 removeById('animSplineEditor');
@@ -337,7 +322,7 @@ const timeLine = () => {
                 removeById('animSplineEditor');
                 var valueInput = document.createElement('input');
                 valueInput.id = 'animValueInput'
-                valueInput.style = 'position:absolute; bottom:100%; width: 150px; height: 14px; font-size: 12px; outline:none';
+                valueInput.style = 'position:absolute; width: 150px; height: 14px; font-size: 12px; outline:none';
                 valueInput.style.left = `calc(${parseFloat(keyTime)} * (100% - 150px)`;
                 valueInput.value = values[keyTimes.indexOf(keyTime)];
                 valueInput.oninput = () => {
@@ -491,12 +476,12 @@ const timeLine = () => {
     mediaTools.append(minimizeButton);
     minimizeButton.setAttribute('id', 'minimizeButton');
     minimizeButton.addEventListener('click', () => {
-        if (timeLineDiv.style.top == '90%') {
+        if (timeLineDiv.style.top == 'calc(100% - 80px)') {
             minimizeButton.innerHTML = '&#8659';
-            timeLineDiv.style.top = '80%';
+            timeLineDiv.style.top = 'calc(100% - 250px)';
         } else {
             minimizeButton.innerHTML = '&#8657';
-            timeLineDiv.style = 'top:90%';
+            timeLineDiv.style.top = 'calc(100% - 80px)';
         }
     })
     addToolTip(minimizeButton, 'Minimize | Maximize', 'top');
@@ -504,7 +489,7 @@ const timeLine = () => {
     var timeSteps = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
     timeSteps.forEach((i) => {
         var timeIndicator = document.createElement('div');
-        timeIndicator.style = "position:absolute; top:16%; height:14px; font-size: 12px; color: rgb(150,150,150); user-select:none";
+        timeIndicator.style = "position:absolute; top:48px; height:14px; font-size: 12px; color: rgb(150,150,150); user-select:none";
         i < 100 ? timeIndicator.style.left = `${i}%` : timeIndicator.style.right = '0%';
         var seconds = Math.round((minSeconds + i * (maxSeconds - minSeconds) / 100) * 1000) / 1000;
         var timeString = `${seconds}s`;
@@ -524,12 +509,33 @@ const timeLine = () => {
         mediaTools.append(timeIndicator);
     });
 
-    mediaTools.style.height = propAnims.style.height = transAnims.style.height = motAnims.style.height = '25%';
-    propAnims.style.borderTop = transAnims.style.borderTop = motAnims.style.borderTop = '1px solid rgb(110,110,110)';
+    // mediaTools.style.height = propAnims.style.height = transAnims.style.height = motAnims.style.height = '25%';
+    // propAnims.style.borderTop = transAnims.style.borderTop = motAnims.style.borderTop = '1px solid rgb(110,110,110)';
+    propAnims.style = transAnims.style = motAnims.style = 'position:absolute;width:100%;height:25%;border-top:1px solid rgb(110,110,110);overflow-y:auto;overflow-x:hidden;';
+    propAnims.style.top = '25%';
+    transAnims.style.top = '50%';
+    motAnims.style.top = '75%';
+    mediaTools.style = 'height:25%;';
     timeLineDiv.append(mediaTools);
     timeLineDiv.append(propAnims);
     timeLineDiv.append(transAnims);
     timeLineDiv.append(motAnims);
+
+    mediaTools.addEventListener('wheel', (evt) => {
+        maxSeconds += evt.deltaY / 1000;
+        maxSeconds = maxSeconds < minSeconds + 1 ? minSeconds + 1 : maxSeconds;
+        if (evt.shiftKey) {
+            minSeconds += evt.deltaY / 1000;
+            minSeconds = minSeconds < 0 ? 0 : minSeconds;
+            if (evt.altKey) {
+                minSeconds = Math.round(minSeconds);
+            };
+        };
+        if (evt.altKey) {
+            maxSeconds = Math.max(Math.round(maxSeconds), minSeconds + 1);
+        };
+        timeLine();
+    });
 };
 
 const stopAllAnimations = () => {

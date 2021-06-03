@@ -161,7 +161,7 @@ button:active {
 
 #sceneMenu {
     top: calc(100% - 54px);
-    left: 3%;
+    left: 28px;
     transform: none;
     max-width: 14%;
 }
@@ -234,7 +234,7 @@ button:active {
 #xyDisplay {
     position: absolute;
     bottom: 0%;
-    right: 68px;
+    right: 52px;
     padding: 0px 8px;
     background: rgb(255, 255, 255);
     opacity: 0.5;
@@ -253,21 +253,6 @@ button:active {
     cursor: pointer;
 }
 
-#colorPallete {
-    position: relative;
-    z-index: 1000;
-    margin-top: 42px;
-    padding-bottom: 0.5%;
-    width: 10%;
-    display: none;
-    background: rgb(255, 255, 255);
-    border: 2px solid rgb(220, 220, 220);
-    border-radius: 10px;
-    min-width: 100px;
-    animation: fadeAll 0.3s;
-    transition: all 0.5s;
-}
-
 #pallete {
     position: absolute;
     left: 0;
@@ -276,23 +261,7 @@ button:active {
     transition: all 0.5s;
 }
 
-#rgbValue {
-    padding-top: 2%;
-    height: 15%;
-    border: 1px solid rgb(209, 208, 208);
-    width: 85%;
-    font-size: 70%;
-    color: rgb(0, 0, 0);
-    outline: none;
-    border-radius: 8px;
-    margin-left: 7.5%;
-}
-
-#red,
-#blue,
-#green,
-#strokeWidth,
-#alpha {
+#strokeWidth {
     -webkit-appearance: none;
     appearance: none;
     outline: none;
@@ -320,59 +289,19 @@ button:active {
     border-top: none;
 }
 
-#red:hover,
-#blue:hover,
-#green:hover,
-#strokeWidth:hover,
-#alpha:hover {
+#strokeWidth:hover {
     cursor: pointer;
 }
 
-#red:hover {
-    background-color: rgb(250, 220, 220);
-}
-
-#blue:hover {
-    background-color: rgb(220, 220, 250);
-}
-
-#green:hover {
-    background-color: rgb(220, 250, 220);
-}
-
-#alpha:hover {
-    background-color: rgb(240, 240, 240);
-}
-
-#red::-webkit-slider-thumb,
-#blue::-webkit-slider-thumb,
-#green::-webkit-slider-thumb,
-#strokeWidth::-webkit-slider-thumb,
-#alpha::-webkit-slider-thumb {
+#strokeWidth::-webkit-slider-thumb {
     -webkit-appearance: none;
     height: 12px;
     width: 12px;
     border-radius: 6px;
 }
 
-#red::-webkit-slider-thumb {
-    background-color: red;
-}
-
-#blue::-webkit-slider-thumb {
-    background-color: blue;
-}
-
-#green::-webkit-slider-thumb {
-    background-color: green;
-}
-
 #strokeWidth::-webkit-slider-thumb {
     background-color: rgb(160, 160, 160);
-}
-
-#alpha::-webkit-slider-thumb {
-    background-color: rgb(150, 150, 150);
 }
 
 .icon,
@@ -416,16 +345,19 @@ button:active {
 
 #timeline {
     position: absolute;
-    bottom: 0;
     left: 18%;
     border: 1px solid rgb(90, 90, 90);
     background: rgba(255, 255, 255, 0.7);
     border-radius: 5px;
     width: 65%;
-    height: 20%;
-    top: 80%;
+    height: 250px;
+    top: calc(100% - 250px);
     overflow: hidden;
     transition: all 0.5s;
+}
+
+#timeline>*::-webkit-scrollbar {
+    width: 0;
 }
 
 .msgBox {
