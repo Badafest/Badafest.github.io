@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="svg" height="100%" width="100%" viewBox="142.97422580859129 39.874447705717 314.2857142857143 315.7142857142857" canvasWidth="220px" canvasHeight="221px" style="background: none; cursor: default;">
-    <defs>
-        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color: rgb(0, 230, 125);"/>
-                        <stop offset="100%" style="stop-color: rgb(100, 23, 230);"/>
-        </linearGradient>
-    </defs>
-    <style>
-        *{
-            transform-origin: center;
-            transform-box: fill-box;
-        }
-    </style>
-    <ellipse stroke="url(#gradient1)" fill="white" stroke-width="8" cx="300" cy="200" rx="150" ry="150"/>
-    <path id='logo' stroke="url(#gradient1)" fill="url(#gradient1)" stroke-width="0.5" d="M 350 120 C 340 80 290 60 260 80 S 221 117 230 150 S 295.5 176.5 314 201.5 S 302 251 260 204 S 205.5 220.5 223.5 239.5 S 310 280 339.5 261 S 364 176.5 323 160 S 283.5 158 262 137.5 S 269.5 98 290.5 100.5 S 315 140.5 330 150 S 360 160 350 120" transform="translate(13.095153808593752,29.73269653320313) rotate(0) scale(1.6240191004600038,1.1545686653781528) skewX(0) skewY(0)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" id="svg" height="100%" width="100%" viewBox="140.26706773864447 33.6461670380425 321.8658261625556 330.4817373791441" canvasWidth="523px" canvasHeight="537px" style="background: none; cursor: default;"><defs style="cursor: pointer;"><pattern id="minorGridPattern" patternUnits="userSpaceOnUse" width="10" height="10"><polyline id="minorGridLines" points="10 0, 0 0, 0 10" stroke="rgb(200,200,200)" fill="none" stroke-width="0.46156667231724036"/></pattern><pattern id="majorGridPattern" patternUnits="userSpaceOnUse" width="100" height="100"><polyline id="majorGridLines" points="100 0, 0 0, 0 100" stroke="rgb(200,200,200)" fill="none" stroke-width="0.9231333446344807"/></pattern></defs><defs style="cursor: pointer;"><linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color: rgb(0, 230, 125);"/><stop offset="100%" style="stop-color: rgb(100, 23, 230);"/></linearGradient></defs><style style="cursor: pointer;">*{transform-origin: center;transform-box: fill-box;}</style><ellipse stroke="url(#gradient1)" fill="white" stroke-width="8" opacity="1" scene="1" cx="300" cy="200" rx="150" ry="150" style="cursor: pointer;" id="animObj5416"/><path stroke="url(#gradient1)" fill="url(#gradient1)" stroke-width="0.5" opacity="1" scene="1" id="logo" d="M 350 120 C 340 80 290 60 260 80 S 221 117 230 150 S 295.5 176.5 314 201.5 S 302 251 260 204 S 205.5 220.5 223.5 239.5 S 310 280 339.5 261 S 364 176.5 323 160 S 283.5 158 262 137.5 S 269.5 98 290.5 100.5 S 315 140.5 330 150 S 360 160 350 120" transform="translate(13.095153808593752,29.73269653320313) rotate(0) scale(1.6240191004600038,1.1545686653781528) skewX(0) skewY(0)" style="cursor: pointer;"/></svg>

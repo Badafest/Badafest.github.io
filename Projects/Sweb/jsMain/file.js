@@ -54,16 +54,92 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-saveSvgIcon.addEventListener('click', () => {
-    pressEsc();
-    svg.setAttribute('canvasWidth', `${workingArea.clientWidth}px`);
-    svg.setAttribute('canvasHeight', `${workingArea.clientHeight}px`);
-    var fReader = new FileReader();
-    fReader.readAsDataURL(svgImg('svg'));
-    fReader.onloadend = (event) => {
-        var imgSvg = event.target.result;
-        triggerDownload(imgSvg, 'img.svg');
-    }
+saveSvgIcon.addEventListener('click', (evt) => {
+    var saveSvgDB = document.createElement('div');
+    saveSvgDB.id = 'editTable';
+    saveSvgDB.style = `padding:8px;text-align:right;right:calc(100% - ${evt.x}px);top:${evt.y+12}px;width:125px;border:1px solid rgb(110,110,110);font-size:14px;`
+    var radio1 = document.createElement('input');
+    radio1.setAttribute('type', 'radio');
+    radio1.setAttribute('name', 'svgType');
+    radio1.setAttribute('value', 'sweb');
+    radio3 = radio1.cloneNode(true);
+    radio3.setAttribute('value', 'one');
+    radio4 = radio1.cloneNode(true);
+    radio4.setAttribute('value', 'inf');
+    radio1.checked = true;
+
+    saveSvgDB.append(document.createTextNode('Static'));
+    saveSvgDB.append(document.createElement('hr'));
+    saveSvgDB.append(document.createTextNode('Sweb SVG'));
+    saveSvgDB.append(radio1);
+    saveSvgDB.append(document.createElement('hr'));
+    saveSvgDB.append(document.createTextNode('Animated'));
+    saveSvgDB.append(document.createElement('hr'));
+    saveSvgDB.append(document.createTextNode('1 Loop'));
+    saveSvgDB.append(radio3);
+    saveSvgDB.append(document.createElement('br'));
+    saveSvgDB.append(document.createTextNode('Infinite Loops'));
+    saveSvgDB.append(radio4);
+    saveSvgDB.append(document.createElement('hr'));
+
+    var okBtn = document.createElement('button');
+    okBtn.innerText = 'Save';
+    saveSvgDB.append(okBtn);
+    document.body.append(saveSvgDB);
+    okBtn.addEventListener('click', () => {
+        var type = document.querySelector("input[name='svgType']:checked").value;
+        var svgSaveBlob;
+        pressEsc();
+        svg.setAttribute('canvasWidth', `${workingArea.clientWidth}px`);
+        svg.setAttribute('canvasHeight', `${workingArea.clientHeight}px`);
+        var fReader = new FileReader();
+        openActionMsg(type);
+        switch (type) {
+            case 'sweb':
+                svgSaveBlob = svgImg('svg');
+                break;
+            case 'one':
+                var anims = Array.from(svg.getElementsByClassName('animation'));
+                anims.forEach((animation) => {
+                    animation.setAttribute('begin', animation.getAttribute('start'));
+                });
+                svgSaveBlob = svgImg('svg');
+                anims.forEach((animation) => {
+                    animation.setAttribute('begin', 'indefinite');
+                });
+                break;
+            case 'inf':
+                var anims = Array.from(svg.getElementsByClassName('animation')).sort((x, y) => { parseFloat(x.getAttribute('start')) - parseFloat(y.getAttribute('start')) });
+                var animIndex = 1;
+                var startSecs = parseFloat(anims[0].getAttribute('start'));
+                anims[0].setAttribute('id', 'anim0');
+                anims[0].setAttribute('begin',
+                    `${startSecs}s;anim${anims.length-1}.end+${startSecs}`);
+                var offSecs = startSecs;
+                anims.slice(1).forEach((animation) => {
+                    startSecs = parseFloat(animation.getAttribute('start'));
+                    animation.setAttribute('id', `anim${animIndex}`);
+                    offSecs = startSecs - offSecs;
+                    animation.setAttribute('begin',
+                        `anim${animIndex-1}.begin+${Math.abs(offSecs)}`);
+                    offSecs = startSecs;
+                    animIndex++;
+                });
+                svgSaveBlob = svgImg('svg');
+                anims.forEach((animation) => {
+                    animation.setAttribute('begin', 'indefinite');
+                });
+                break;
+            default:
+                break;
+        }
+        openActionMsg('hello there!')
+        fReader.readAsDataURL(svgSaveBlob);
+        fReader.onloadend = (event) => {
+            openActionMsg('Please Confirm Download');
+            triggerDownload(event.target.result, 'img.svg');
+        };
+    });
 });
 
 savePngIcon.addEventListener('click', (event) => {
@@ -180,25 +256,11 @@ const svgImg = (format = 'svg') => {
     };
     var svgBlob = new Blob([ser.serializeToString(format == 'svg' ? svg : svgClone)], { type: "image/svg+xml;charset=utf-8" });
     return svgBlob;
-    // fReader.onloadend = (event) => {
-    //     imgSvg = event.target.result;
-    //     if (format != 'svg') {
-    //         initializePngImg();
-    //         img.onload = (ctx) => { drawPngImageFx(ctx) };
-    //     } else {
-    //         if (downloadImg) { triggerDownload(imgSvg, `img.${format}`); }
-    //     };
-    // };
 };
 
 const openSvg = (svgNew) => {
-    // var width = svg.getAttribute('width');
-    // var height = svg.getAttribute('height');
-    // svgNew.setAttribute('width', width);
-    // svgNew.setAttribute('height', height);
     workingArea.append(svgNew);
     if (!svgNew.getElementById('minorGridLines')) {
-        console.log(svg.getElementsByTagName('defs')[0]);
         svgNew.prepend(svg.getElementsByTagName('defs')[0]);
     };
     svg.remove();
@@ -207,19 +269,16 @@ const openSvg = (svgNew) => {
     svg = svgNew;
     svg.id = 'svg';
     var minorGridTemp = document.getElementById('minorGrid');
-    if (minorGridTemp != null && minorGridTemp != undefined) {
+    if (minorGridTemp) {
         minorGrid = minorGridTemp;
-        // minorGrid.setAttribute('width', width);
-        // minorGrid.setAttribute('height', height);
         minorGridOn = true;
     }
     var majorGridTemp = document.getElementById('majorGrid');
-    if (majorGridTemp != null && majorGridTemp != undefined) {
+    if (majorGridTemp) {
         majorGrid = majorGridTemp;
-        // majorGrid.setAttribute('width', width);
-        // majorGrid.setAttribute('height', height);
         majorGridOn = true;
     };
+
     // resetSvg.click();
     var objects = Array.from(svg.childNodes).filter((x) => { return ['defs', 'style'].indexOf(x.tagName) == -1 });
 

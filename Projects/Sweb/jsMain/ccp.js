@@ -35,6 +35,7 @@ var ccpIcon = document.getElementById('ccp');
 
 ccpIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = ccpIcon;
     activeTool = 'ccp';
     openActionMsg('Active Tool: Box Select', null);
 });
@@ -43,11 +44,17 @@ workingArea.addEventListener('click', (e) => {
     if (activeTool == 'ccp') {
         if (!selectionBoxCoords && !selBox) {
             selectionBoxCoords = coordinates.innerText.split(', ');
-            selBox = document.createElementNS(ns, 'rect');
-            selBox.setAttribute('fill', 'rgba(0,0,0,0.05)');
-            selBox.setAttribute('stroke', 'black');
-            selBox.setAttribute('stroke-width', 1 / svgUnits);
-            selBox.setAttribute('stroke-dasharray', `${20/svgUnits} ${10/svgUnits}`);
+            selBox = document.createElementNS(ns, 'g');
+            selBox1 = document.createElementNS(ns, 'rect');
+            selBox1.setAttribute('fill', 'rgba(0,0,0,0.05)');
+            selBox1.setAttribute('stroke', 'black');
+            selBox1.setAttribute('stroke-width', 1 / svgUnits);
+            selBox1.setAttribute('stroke-dasharray', `${10/svgUnits} ${10/svgUnits}`);
+            selBox.append(selBox1);
+            selBox2 = selBox1.cloneNode(true);
+            selBox2.setAttribute('stroke', 'white');
+            selBox2.setAttribute('stroke-dashoffset', `${10/svgUnits}`);
+            selBox.append(selBox2);
             svg.append(selBox);
         } else if (selectionBoxCoords) {
             selectionBoxCoords = null;
@@ -124,10 +131,12 @@ workingArea.addEventListener('click', (e) => {
 workingArea.addEventListener('mousemove', () => {
     if (activeTool == 'ccp' && selectionBoxCoords) {
         var A = coordinates.innerText.split(', ');
-        selBox.setAttribute('x', Math.min(selectionBoxCoords[0], A[0]));
-        selBox.setAttribute('y', Math.min(selectionBoxCoords[1], A[1]));
-        selBox.setAttribute('width', Math.abs(selectionBoxCoords[0] - A[0]));
-        selBox.setAttribute('height', Math.abs(selectionBoxCoords[1] - A[1]));
+        Array.from(selBox.childNodes).forEach((selBox) => {
+            selBox.setAttribute('x', Math.min(selectionBoxCoords[0], A[0]));
+            selBox.setAttribute('y', Math.min(selectionBoxCoords[1], A[1]));
+            selBox.setAttribute('width', Math.abs(selectionBoxCoords[0] - A[0]));
+            selBox.setAttribute('height', Math.abs(selectionBoxCoords[1] - A[1]));
+        });
     } else if (activeTool == 'copy' || activeTool == 'clone') {
         removeById('copyObj');
         var cpF = activeTool == 'copy' ? copyObject : duplicateObject;

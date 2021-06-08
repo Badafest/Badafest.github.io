@@ -158,7 +158,7 @@ const COLORS = [
     'Black'
 ]
 
-var gcStart = 66;
+var gcStart = 53;
 (() => {
     var pallete = document.getElementById('pallete');
     for (var x = 0; x < window.innerHeight / 24; x++) {
@@ -210,7 +210,7 @@ const fillGlobalPallete = () => {
 };
 
 document.getElementById('pallete').addEventListener('wheel', (evt) => {
-    gcStart += evt.deltaY > 0 ? 1 : -1;
+    gcStart += evt.deltaY > 0 ? 5 : -5;
     fillGlobalPallete();
 });
 

@@ -17,6 +17,7 @@ var attPaintIcon = document.getElementById('attPainter');
 var editObjIcon = document.getElementById('edit');
 var groupIcon = document.getElementById('group');
 var gObjs = [];
+var lastClickedIcon = null;
 
 const getFillColor = () => {
     return fillColorIcon.value;
@@ -223,6 +224,7 @@ const drawBoundingBox = (obj) => {
 
 addObjectIcon.addEventListener('click', (event) => {
     pressEsc();
+    lastClickedIcon = addObjectIcon;
     activeTool = 'addObj';
     stopWaitForPoint();
     removeById('objIn');
@@ -288,6 +290,7 @@ addObjectIcon.addEventListener('click', (event) => {
 
 attPaintIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = attPaintIcon;
     activeTool = 'painter';
     var objects = svg.childNodes;
     var attributes = {};
@@ -324,6 +327,7 @@ attPaintIcon.addEventListener('click', () => {
 
 editObjIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = editObjIcon;
     activeTool = 'transform';
     stopWaitForPoint();
     var objects = svg.childNodes;
@@ -521,6 +525,7 @@ workingArea.addEventListener('mousemove', () => {
 
 groupIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = groupIcon;
     activeTool = 'group';
     svg.childNodes.forEach((x) => {
         if (x.id != 'majorGrid' && x.id != 'minorGrid') {
@@ -679,6 +684,7 @@ const drawImage = (A, B, link) => {
 
 drawLineIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawLineIcon;
     clickedCoordinates = [];
     activeTool = 'line';
     removeById('tempObj');
@@ -688,6 +694,7 @@ drawLineIcon.addEventListener('click', () => {
 
 drawPathIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawPathIcon;
     clickedCoordinates = [];
     activeTool = 'path';
     removeById('tempObj');
@@ -697,6 +704,7 @@ drawPathIcon.addEventListener('click', () => {
 
 drawArcIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawArcIcon;
     clickedCoordinates = [];
     activeTool = 'arc';
     removeById('tempObj');
@@ -706,6 +714,7 @@ drawArcIcon.addEventListener('click', () => {
 
 drawFreeIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawFreeIcon;
     clickedCoordinates = [];
     activeTool = 'free';
     removeById('tempObj');
@@ -715,6 +724,7 @@ drawFreeIcon.addEventListener('click', () => {
 
 drawEllipseIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawEllipseIcon;
     clickedCoordinates = [];
     activeTool = 'ellipse';
     removeById('tempObj');
@@ -724,6 +734,7 @@ drawEllipseIcon.addEventListener('click', () => {
 
 drawRectIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawRectIcon;
     clickedCoordinates = [];
     activeTool = 'rect';
     removeById('tempObj');
@@ -733,6 +744,7 @@ drawRectIcon.addEventListener('click', () => {
 
 drawTextIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawTextIcon;
     clickedCoordinates = [];
     activeTool = 'text';
     removeById('tempObj');
@@ -742,6 +754,7 @@ drawTextIcon.addEventListener('click', () => {
 
 drawTexIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawTexIcon;
     texItem = null;
     clickedCoordinates = [];
     activeTool = 'tex';
@@ -752,6 +765,7 @@ drawTexIcon.addEventListener('click', () => {
 
 drawImgIcon.addEventListener('click', () => {
     pressEsc();
+    lastClickedIcon = drawImgIcon;
     removeById('imgUpload');
     removeById('tempObj');
     var imgUpload = document.createElement('input');
@@ -789,11 +803,14 @@ document.addEventListener('keydown', (event) => {
         stopWaitForPoint();
         Array.from(document.getElementsByClassName('msgBox')).forEach((x) => { x.remove(); })
         openActionMsg(`Active Tool: Null`);
-    } else if (activeTool == 'group' && event.key == 'Enter') {
-        groupItems(gObjs);
-        openActionMsg(`Grouped ${gObjs.length} items`);
-        gObjs = [];
-        activeTool = null;
+    } else if (event.key == 'Enter') {
+        if (activeTool == 'group') {
+            groupItems(gObjs);
+            openActionMsg(`Grouped ${gObjs.length} items`);
+            gObjs = [];
+            activeTool = null;
+        };
+        if (!(document.getElementById('editTable') || document.getElementById('objIn')) && lastClickedIcon) { lastClickedIcon.click(); }
     };
 });
 

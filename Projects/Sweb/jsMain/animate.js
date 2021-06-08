@@ -560,16 +560,22 @@ timelineIcon.addEventListener('click', () => {
 });
 
 animatePropIcon.addEventListener('click', (event) => {
+    pressEsc();
+    lastClickedIcon = animatePropIcon;
     activeTool = 'animate';
     openAnimPropDB(event);
 });
 
 animateTranIcon.addEventListener('click', (event) => {
+    pressEsc();
+    lastClickedIcon = animateTranIcon;
     activeTool = 'animate';
     openAnimTranDB(event);
 });
 
 animateMotIcon.addEventListener('click', (event) => {
+    pressEsc();
+    lastClickedIcon = animateMotIcon;
     activeTool = 'animate';
     openAnimMotDB(event);
 });
@@ -698,12 +704,12 @@ const openAnimTranDB = (event) => {
     objDropDown.style.padding = '2px';
     objects.forEach((object) => {
         if (['defs', 'animate', 'animateMotion', 'animateTransform'].indexOf(object.tagName) == -1 && ['majorGrid', 'minorGrid', 'boundingBox', 'tempObj'].indexOf(object.id) == -1) {
-            var defaultValue = (atrNam) => {
+            const defaultValue = (atrNam) => {
                 if (object.getAttributeNames().indexOf(atrNam) != -1) {
                     return object.getAttribute(atrNam);
                 } else {
                     if (object.getAttributeNames().indexOf('transform') != -1) {
-                        var matches = [...transform.matchAll(`/${atrNam}\(.*\)/g`)];
+                        var matches = [...object.getAttribute('transform').matchAll(`/${atrNam}\(.*\)/g`)];
                         if (matches.length != 0) {
                             var match = matches[0];
                             return match.substring(atrNam.length + 1, match.length - 1).replaceAll(',', ' ');
@@ -929,6 +935,7 @@ const openAnimMotDB = (event) => {
 };
 
 document.getElementById('exportVideo').addEventListener('click', () => {
+    pressEsc();
     framesArray = [];
     const callbackFx = (i) => {
         changeScene(i);
