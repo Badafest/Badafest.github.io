@@ -180,9 +180,19 @@ const editObject = (event, object) => {
 
 const addObject = (type, attributes, textContent = '') => {
     var obj = document.createElementNS(ns, type);
-    obj.setAttribute('stroke', getStrokeColor());
+
     obj.setAttribute('fill', getFillColor());
+    obj.setAttribute('stroke', getStrokeColor());
     obj.setAttribute('stroke-width', getStrokeWidth());
+    if (strokeDashArray.length) {
+        obj.setAttribute('stroke-dasharray', strokeDashArray);
+        if (strokeDashOffset.length) {
+            obj.setAttribute('stroke-dashoffset', strokeDashOffset);
+        };
+    };
+    if (strokeLineJoin != 'miter') { obj.setAttribute('stroke-linejoin', strokeLineJoin) };
+    if (strokeLineCap != 'butt') { obj.setAttribute('stroke-linecap', strokeLineCap) };
+    if (nonScalingStroke) { obj.setAttribute('vector-effect', 'non-scaling-stroke') };
     obj.setAttribute('opacity', 1);
     obj.setAttribute('scene', activeScene);
 

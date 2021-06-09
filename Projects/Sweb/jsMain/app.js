@@ -1,6 +1,11 @@
 var fillColor = '#ffffff';
 var strokeColor = '#000000';
 var strokeWidth = 0.5;
+var strokeDashArray = '';
+var strokeDashOffset = '';
+var strokeLineCap = 'butt'; //butt|round|square
+var strokeLineJoin = 'miter'; //miter|round|bevel
+var nonScalingStroke = false;
 
 var activeTool = null;
 
@@ -72,7 +77,7 @@ var workingArea = document.getElementById('workingArea');
 
 var fillColorIcon = document.getElementById('fillColorIcon');
 var strokeColorIcon = document.getElementById('strokeColorIcon');
-var strokeWidthIcon = document.getElementById('strokeWidthIcon');
+var strokeWidthIcon = document.getElementById('strokes');
 var strokeWidthValue = document.getElementById('strokeWidth');
 
 var minorGridIcon = document.getElementById('minorGrids');
@@ -282,6 +287,71 @@ strokeWidthValue.oninput = () => {
     document.getElementById('strokeValueOutput').innerHTML = strokeWidth;
     openActionMsg(`Stroke Width: ${strokeWidth}`);
 };
+
+strokeWidthIcon.addEventListener('click', (e) => {
+    if (e.target != strokeWidthValue) {
+        pressEsc();
+        var strokeOptionsDB = document.createElement('div');
+        strokeOptionsDB.style = `width:200px; font-size:14px; border:1px solid rgb(110,110,110);left:${e.x}px;top:${e.y+12}px;transform:translate(-50%)`;
+        strokeOptionsDB.id = 'editTable';
+        strokeOptionsDB.append(document.createElement('hr'));
+
+        var strokeDashArrayIn = document.createElement('input');
+        strokeDashArrayIn.id = 'attrIn';
+        strokeOptionsDB.append(document.createTextNode('Dash Array'));
+        strokeOptionsDB.append(strokeDashArrayIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+        strokeDashArrayIn.oninput = () => { strokeDashArray = strokeDashArrayIn.value };
+
+        var strokeDashOffsetIn = document.createElement('input');
+        strokeDashOffsetIn.id = 'attrIn';
+        strokeDashOffsetIn.setAttribute('type', 'number');
+        strokeOptionsDB.append(document.createTextNode('Dash Offset'));
+        strokeOptionsDB.append(strokeDashOffsetIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+        strokeDashOffsetIn.oninput = () => { strokeDashOffset = strokeDashOffsetIn.value };
+
+        var strokeLineJoinIn = document.createElement('select');
+        ['miter', 'round', 'bevel'].forEach((opt) => {
+            var option = document.createElement('option');
+            option.innerText = opt;
+            option.value = opt;
+            strokeLineJoinIn.append(option);
+        });
+        strokeLineJoinIn.id = 'attrIn';
+        strokeOptionsDB.append(document.createTextNode('Line Join'));
+        strokeOptionsDB.append(document.createElement('br'));
+        strokeOptionsDB.append(strokeLineJoinIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+        strokeLineJoinIn.oninput = () => { strokeLineJoin = strokeLineJoinIn.value };
+
+        var strokeLineCapIn = document.createElement('select');
+        ['butt', 'round', 'square'].forEach((opt) => {
+            var option = document.createElement('option');
+            option.innerText = opt;
+            option.value = opt;
+            strokeLineCapIn.append(option);
+        });
+        strokeLineCapIn.id = 'attrIn';
+        strokeOptionsDB.append(document.createTextNode('Line Cap'));
+        strokeOptionsDB.append(document.createElement('br'));
+        strokeOptionsDB.append(strokeLineCapIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+        strokeLineCapIn.oninput = () => { strokeLineCap = strokeLineCapIn.value };
+
+        var scaleStrokeIn = document.createElement('input');
+        scaleStrokeIn.setAttribute('type', 'checkbox');
+        strokeOptionsDB.append(document.createTextNode('Donot Scale Stroke'));
+        strokeOptionsDB.append(scaleStrokeIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+        scaleStrokeIn.oninput = () => { nonScalingStroke = scaleStrokeIn.checked };
+
+        document.body.append(strokeOptionsDB);
+        addToolTip(strokeOptionsDB, 'Stroke Properties');
+        addToolTip(strokeDashArrayIn, 'Specify Dash Format Like "10 5 10"');
+        addToolTip(strokeDashOffsetIn, 'Dash Array Offset');
+    }
+})
 
 fillColorIcon.oninput = () => { changeFillColor(fillColorIcon.value) };
 

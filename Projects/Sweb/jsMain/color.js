@@ -158,7 +158,7 @@ const COLORS = [
     'Black'
 ]
 
-var gcStart = 53;
+var gcStart = 66;
 (() => {
     var pallete = document.getElementById('pallete');
     for (var x = 0; x < window.innerHeight / 24; x++) {
