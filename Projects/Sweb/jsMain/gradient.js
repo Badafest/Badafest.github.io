@@ -4,8 +4,8 @@ var gradCount = 0;
 var svg = document.getElementById('svg');
 
 const currGradient = () => document.getElementById('gradient').cloneNode(true);
-const reAssignCurrGrad = () => {
-    var toolGrad = document.getElementById(`gradient${gradCount}`).cloneNode(true);
+const reAssignCurrGrad = (gradId=`gradient${gradCount}`) => {
+    toolGrad = document.getElementById(gradId).cloneNode(true);
     toolGrad.id = 'gradient';
     document.getElementById('gradient').remove();
     var toolDefs = gradientIcon.getElementsByTagName('defs')[0];
@@ -16,7 +16,10 @@ gradientIcon.addEventListener('click', (event) => {
     activeTool = 'gradient';
     if (event.ctrlKey) {
         openGradEditDialogBox(event);
-    } else {
+    } else if (event.shiftKey) {
+		openExGradEditDialogBox(event);
+	}
+	else {
         openStopEditDialogBox(event);
     };
     var objects = svg.childNodes;
@@ -105,8 +108,8 @@ openStopEditDialogBox = (event) => {
         stops = Array.from(currGrad.getElementsByTagName('stop'));
         var originX = parseFloat(gradBoxMain.getBoundingClientRect().x);
         var widthRec = parseFloat(gradBoxMain.getBoundingClientRect().width);
-        var beginX = parseFloat(currGrad.getAttribute('x1'));
-        var endX = parseFloat(currGrad.getAttribute('x2'));
+        var beginX = parseFloat(gradLine.getAttribute('x1'));
+        var endX = parseFloat(gradLine.getAttribute('x2'));
         var pointX = parseFloat(evt.x);
         var offsetTemp = parseInt(((pointX - originX) / widthRec) * 100);
         var offsetTemp = 100 * (offsetTemp - beginX) / (endX - beginX);
@@ -137,7 +140,6 @@ openStopEditDialogBox = (event) => {
     });
 
     const dummyStopFunction = (stop) => {
-        console.log(stop.style.stopColor)
         var offset = parseFloat(stop.getAttribute('offset'));
         var stopHandle = document.createElement('input');
         stopHandle.style = `width:6%;height:6%;position:absolute;border:1px solid black;cursor:pointer`
@@ -254,7 +256,7 @@ openGradEditDialogBox = (event) => {
         editGradAttrDB.setAttribute('style',
             `position:absolute; top:${event.y+10}px; left:${event.x}px; width:10%; background:white; border:1px solid rgb(190,190,190); border-radius:5px; font-size:14px`);
         document.body.append(editGradAttrDB);
-        var attrNames = workingGrad.getAttributeNames();
+        var attrNames = workingGrad.getAttributeNames().filter((c)=>{return c!='id'});
         attrNames.forEach((attrName) => {
             var label = document.createElement('label');
             label.innerText = attrName + ' ';
@@ -271,6 +273,39 @@ openGradEditDialogBox = (event) => {
                 reAssignCurrGrad();
             };
         });
+    };
+};
+
+openExGradEditDialogBox = (event) => {
+    removeById('gradDiagBox');
+    removeById('gradDiagEditBox');
+    removeById('editTable');
+
+    var gEDB = document.createElement('div');
+    gEDB.setAttribute('style',
+        `position:absolute; top:${event.y+10}px; left:${event.x}px; width:10%; height:11%; background:white; border:1px solid rgb(190,190,190); border-radius:5px; font-size:14px`);
+    gEDB.id = 'gradDiagEditBox';
+    document.body.append(gEDB);
+
+    var typeInput = document.createElement('select');
+    typeInput.setAttribute('id', 'typeOfGrad');
+    typeInput.setAttribute('style', 'margin-top:5px; border:1px solid rgb(190,190,190); outline:none');
+    var typeLabel = document.createElement('label');
+    typeLabel.setAttribute('for', 'typeOfGrad');
+    typeLabel.innerText = 'Id:   ';
+    var options = Array.from(svg.getElementsByTagName('linearGradient')).concat(Array.from(svg.getElementsByTagName('radialGradient'))).map((x)=>{return x.id});
+    options.forEach((option) => {
+        var optElem = document.createElement('option');
+        optElem.setAttribute('value', option);
+        optElem.innerText = option;
+        typeInput.append(optElem);
+    });
+    gEDB.append(typeLabel);
+    gEDB.append(typeInput);
+    gEDB.append(document.createElement('hr'));
+
+    typeInput.oninput = () => {
+        reAssignCurrGrad(typeInput.value);
     };
 };
 

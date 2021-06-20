@@ -334,7 +334,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 const snapToPath = (obj, path, mode = 'cc') => {
-    var bbBox = obj.getBoundingClientRect();
+    var bbBox = obj.getBBox();
     if (!obj.getAttribute('transform')) { obj.setAttribute('transform', 'translate(0,0)') }
     if (bbBox && path.getTotalLength) {
         var x = bbBox.x;
@@ -344,11 +344,11 @@ const snapToPath = (obj, path, mode = 'cc') => {
         var pts = [];
         var m = path.getCTM();
         for (i = 0; i <= path.getTotalLength(); i += minorGridSeparation) {
-            pts.push(path.getPointAtLength(i).matrixTransform(m));
+            pts.push(path.getPointAtLength(i));
         };
         var dists = pts.map((X) => { return Math.hypot(X.x - x, X.y - y) });
         var minPt = pts[dists.indexOf(Math.min(...dists))];
-        moveObject(obj, (minPt.x - x) / svgUnits, (minPt.y - y) / svgUnits);
+        moveObject(obj, minPt.x - x,minPt.y - y);
     };
 };
 
@@ -375,22 +375,21 @@ const arrayOverPath = (obj, path, no = 10, closed = 'auto') => {
     } else {
         closed = closed == 'true';
     };
-    var bbBox = obj.getBoundingClientRect();
+    var bbBox = obj.getBBox();
     no = Math.max(2, Math.min(no, 100));
     if (!obj.getAttribute('transform')) { obj.setAttribute('transform', 'translate(0,0)') }
     if (bbBox && path.getTotalLength) {
-        var m = path.getCTM();
         var x = bbBox.x + 0.5 * bbBox.width;
         var y = bbBox.y + 0.5 * bbBox.height;
-        var pt0 = path.getPointAtLength(0).matrixTransform(m);
-        var tobj = copyObject(obj, (pt0.x - x) / svgUnits, (pt0.y - y) / svgUnits);
+        var pt0 = path.getPointAtLength(0);
+        var tobj = copyObject(obj, pt0.x - x, pt0.y - y);
         tobj.id = `arrayParent${Math.round(Math.random()*1000)}`;
         var href = `#${tobj.id}`;
         var step = path.getTotalLength() / (no - 1);
         var limit = closed ? path.getTotalLength() - step : path.getTotalLength();
         for (i = step; i <= limit; i += step) {
-            var pt = path.getPointAtLength(i).matrixTransform(m);
-            addObject('use', { 'href': href, 'x': (pt.x - pt0.x) / svgUnits, 'y': (pt.y - pt0.y) / svgUnits });
+            var pt = path.getPointAtLength(i);
+            addObject('use', { 'href': href, 'x': pt.x - pt0.x, 'y': pt.y - pt0.y });
         };
     };
 };
@@ -403,7 +402,6 @@ const maskOnPath = (obj, ref) => {
     pushToDefs(maskObj);
     obj.setAttribute('mask', `url(#${maskObjid})`);
 };
-
 
 const getScreenPoint = (point, matrix) => {
     var x = parseFloat(point[0]);
@@ -420,12 +418,10 @@ const mergePaths = (obj, ref) => {
     if (dRef && TdObj) {
         var m = obj.getCTM();
         var points = [...TdObj.matchAll(/[A-Z]\s?[0-9|\s|.]+/g)];
-        console.log(points);
         var dObj = '';
         for (x in points) {
             var pt = points[x];
             var ptList = pt[0].slice(1).split(/\s/).map((x) => { return parseFloat(x) }).filter((x) => { return x == 0 || x });
-            console.log(ptList);
             var outPtList = [];
             if (ptList.length % 2 == 0) {
                 for (i = 0; i < ptList.length; i += 2) {
@@ -434,11 +430,9 @@ const mergePaths = (obj, ref) => {
             } else if (ptList.length == 7) {
                 outPtList = [ptList.slice(0, 2).join(' '), ptList.slice(2, 5).join(' '), getScreenPoint([ptList[5], ptList[6]], m).join(' ')];
             }
-            console.log(outPtList);
             var index = pt.index;
             dObj += pt[0][0] + '\n' + outPtList.join('\n') + '\n' + TdObj.slice(index + pt[0].length, index + pt[0].length + points[x + 1] ? points[x + 1].index : 0);
         };
-
         ref.setAttribute('d', `${dRef}\n${dObj}`);
         obj.remove();
     };

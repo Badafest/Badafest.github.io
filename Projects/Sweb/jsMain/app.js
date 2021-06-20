@@ -202,10 +202,20 @@ const displayXY = (event) => {
         x = Math.round(x / minorGridSeparation) * minorGridSeparation;
         y = Math.round(y / minorGridSeparation) * minorGridSeparation;
     }
-    if (event.altKey) {
+    else if (event.altKey) {
         x = Math.round(x / majorGridSeparation) * majorGridSeparation;
         y = Math.round(y / majorGridSeparation) * majorGridSeparation;
-    }
+    }else if(event.shiftKey && ['majorGrid','minorGrid'].indexOf(event.target.id)==-1 && event.target.getTotalLength){
+		var path = event.target;
+		var pts = [];
+        for (let i = 0; i <= path.getTotalLength(); i += minorGridSeparation/2) {
+            pts.push(path.getPointAtLength(i));
+        };
+        var dists = pts.map((X) => { return Math.hypot(X.x - x, X.y - y) });
+        var minPt = pts[dists.indexOf(Math.min(...dists))];
+		x = Math.round(minPt.x*1000)/1000;
+		y = Math.round(minPt.y*1000)/1000;
+	}
     coordinates.innerHTML = `${x}, ${y}`;
 };
 

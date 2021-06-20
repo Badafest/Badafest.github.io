@@ -10,6 +10,9 @@
 </head>
 
 <body>
+	<div id='boot' style='opacity:1;transition:all ease 0.5s;position:absolute;width:100%;height:100%;background:white;z-index:9999999;'>
+        <img src='./sweb.svg' style='margin-top:10%;height:50%'>
+    </div>
     <div id='container'>
         <div id='workingArea'></div>
     </div>
@@ -296,9 +299,6 @@
         <div id='presentNextScene' class='drawIcon' style="font-size: 24px;">&#187</div>
     </div>
     <div id='animClock' style='display:none; opacity:0'>00:00.0</div>
-    <div id='boot' style='opacity:1;transition:all ease 0.5s;position:absolute;width:100%;height:100%;background:white;z-index:9999999;'>
-        <img src='./sweb.svg' style='margin-top:10%;height:50%'>
-    </div>
     <script src=' ./jsMain/message.js '></script>
     <script src='./jsMain/color.js'></script>
     <script src='./jsMain/app.js '></script>
@@ -324,12 +324,11 @@
     <!-- EXTENSIONS SCRIPTS -->
     <script src='./extensions/pathFx.js '></script>
     <script src='./extensions/fx.js '></script>
-
     <script>
         document.getElementById('boot').style.opacity = 0;
         setTimeout(() => {
             document.getElementById('boot').remove();
-        }, 1000)
+        }, 2000)
     </script>
 </body>
 
