@@ -138,7 +138,8 @@ button:active {
 
 #toolBar,
 #sceneMenu,
-#presentMenu {
+#presentMenu,
+#shapeToolbar {
     position: absolute;
     top: 0%;
     left: 50%;

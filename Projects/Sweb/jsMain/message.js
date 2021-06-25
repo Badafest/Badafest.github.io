@@ -92,6 +92,7 @@ addToolTip(document.getElementById('drawArc'), 'Draw Arc');
 addToolTip(document.getElementById('drawFree'), 'Draw Freehand Path');
 addToolTip(document.getElementById('drawEllipse'), 'Draw Ellipse');
 addToolTip(document.getElementById('drawRect'), 'Draw Rounded Rectangle');
+addToolTip(document.getElementById('drawShape'), 'Draw Shape');
 addToolTip(document.getElementById('drawText'), 'Add Text');
 addToolTip(document.getElementById('drawTex'), 'Add LaTeX<br>[uses MathJaX]');
 addToolTip(document.getElementById('drawImg'), 'Add Image');

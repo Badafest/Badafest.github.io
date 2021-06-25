@@ -1,11 +1,16 @@
-var fillColor = '#ffffff';
-var strokeColor = '#000000';
-var strokeWidth = 0.5;
-var strokeDashArray = '';
-var strokeDashOffset = '';
-var strokeLineCap = 'butt'; //butt|round|square
-var strokeLineJoin = 'miter'; //miter|round|bevel
-var nonScalingStroke = false;
+const defaultProperties = {
+	fillColor : '#ffffff',
+	strokeColor : '#000000',
+	strokeWidth : 0.5,
+	strokeDashArray : '',
+	strokeDashOffset : '',
+	strokeLineCap : 'butt', //butt|round|square
+	strokeLineJoin : 'miter', //miter|round|bevel
+	nonScalingStroke : false,
+	startMarker : 'none',
+	midMarker : 'none',
+	endMarker : 'none'
+}
 
 var activeTool = null;
 
@@ -182,13 +187,13 @@ const removeById = (id) => {
 };
 
 const changeFillColor = (newColor) => {
-    fillColor = newColor;
+    defaultProperties.fillColor = newColor;
     fillColorIcon.value = newColor;
     openActionMsg(`Fill Color: ${newColor}`);
 }
 
 const changeStrokeColor = (newColor) => {
-    strokeColor = newColor;
+    defaultProperties.strokeColor = newColor;
     strokeColorIcon.value = newColor;
     openActionMsg(`Stroke Color: ${newColor}`);
 }
@@ -293,10 +298,12 @@ coordinates.addEventListener('click', (event) => {
 });
 
 strokeWidthValue.oninput = () => {
-    strokeWidth = strokeWidthValue.value;
-    document.getElementById('strokeValueOutput').innerHTML = strokeWidth;
-    openActionMsg(`Stroke Width: ${strokeWidth}`);
+    defaultProperties.strokeWidth = strokeWidthValue.value;
+    document.getElementById('strokeValueOutput').innerHTML = defaultProperties.strokeWidth;
+    openActionMsg(`Stroke Width: ${defaultProperties.strokeWidth}`);
 };
+
+var markerList = ['none',9204,9205,9206,9207,9209,9210,9632,9633,9635,9650,9651,9654,9655,9660,9661,9664,9665,9670,9671,9672,9673,9678,9679,9680,9681,9682,9683,9684,9685,9698,9699,9670,9671,9728,9733,9734,9820,9821,9822,9823,9824,9825,9826,9827,9828,9829,9830,9831,9833,9834,9835,9836,10025,10026,10027,10028,10029,10030,10031,10032,10033,10034,10035,10036,10037,10038,10039,10040,10041,10042,10043,10044,10045,10046,10047,10048,10049,10686,10687,11040,11041,11042,11043,11044,11045,11046,11047,11048,11049,11050,11051,11052,11053,11054,10055,11095,11096,11200,11201,11202,11203,11204,11205,11206,11207,11208];
 
 strokeWidthIcon.addEventListener('click', (e) => {
     if (e.target != strokeWidthValue) {
@@ -305,21 +312,147 @@ strokeWidthIcon.addEventListener('click', (e) => {
         strokeOptionsDB.style = `width:200px; font-size:14px; border:1px solid rgb(110,110,110);left:${e.x}px;top:${e.y+12}px;transform:translate(-50%)`;
         strokeOptionsDB.id = 'editTable';
         strokeOptionsDB.append(document.createElement('hr'));
-
+		
+		var startMarkerIn = document.createElement('select');
+		startMarkerIn.id = 'attrIn';
+		strokeOptionsDB.append(document.createTextNode('Start Marker'));
+		strokeOptionsDB.append(document.createElement('br'));
+        strokeOptionsDB.append(startMarkerIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+		markerList.forEach((opt)=>{
+			var option = document.createElement('option');
+            option.innerHTML = opt=='none'?'None':`&#${opt}`;
+            option.value = opt=='none'?'none':`${opt}-${defaultProperties.strokeColor.slice(1)}${defaultProperties.fillColor.slice(1)}`;
+            startMarkerIn.append(option);
+			if(opt==defaultProperties.startMarker.split('-')[0]){option.setAttribute('selected','')};
+		});
+        startMarkerIn.oninput = () => { 
+			defaultProperties.startMarker = startMarkerIn.value;
+			if(defaultProperties.startMarker!='none'){
+				var marker = document.createElementNS(ns,'marker');
+				marker.id = `startMarker${defaultProperties.startMarker}`;
+				removeById(marker.id);
+				marker.setAttribute('viewBox','0 0 50 50');
+				marker.setAttribute('markerWidth','50');
+				marker.setAttribute('markerHeight','50');
+				marker.setAttribute('refX','25');
+				marker.setAttribute('refY','22');
+				marker.setAttribute('markerUnits','strokeWidth');
+				marker.setAttribute('orient','auto');
+				var markerElement = document.createElementNS(ns,'text');
+				markerElement.setAttribute('x','25');
+				markerElement.setAttribute('y','25');
+				markerElement.setAttribute('text-anchor','middle');
+				markerElement.setAttribute('dominant-baseline','middle');
+				markerElement.setAttribute('font-size','40');
+				markerElement.setAttribute('stroke-width','1');
+				markerElement.setAttribute('stroke',`${defaultProperties.strokeColor}`);
+				markerElement.setAttribute('fill',`${defaultProperties.fillColor}`);
+				markerElement.innerHTML=`&#${defaultProperties.startMarker.split('-')[0]}`;
+				marker.append(markerElement);
+				svg.getElementsByTagName('defs')[0].append(marker);
+			};
+		};
+		
+		var midMarkerIn = document.createElement('select');
+		midMarkerIn.id = 'attrIn';
+		strokeOptionsDB.append(document.createTextNode('Mid Marker'));
+		strokeOptionsDB.append(document.createElement('br'));
+        strokeOptionsDB.append(midMarkerIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+		markerList.forEach((opt)=>{
+			var option = document.createElement('option');
+            option.innerHTML = opt=='none'?'None':`&#${opt}`;
+            option.value = opt=='none'?'none':`${opt}-${defaultProperties.strokeColor.slice(1)}${defaultProperties.fillColor.slice(1)}`;
+            midMarkerIn.append(option);
+			if(opt==defaultProperties.midMarker.split('-')[0]){option.setAttribute('selected','')};
+		});
+        midMarkerIn.oninput = () => { 
+			defaultProperties.midMarker = midMarkerIn.value;
+			if(defaultProperties.midMarker!='none'){
+				var marker = document.createElementNS(ns,'marker');
+				marker.id = `midMarker${defaultProperties.midMarker}`;
+				removeById(marker.id);
+				marker.setAttribute('viewBox','0 0 50 50');
+				marker.setAttribute('markerWidth','50');
+				marker.setAttribute('markerHeight','50');
+				marker.setAttribute('refX','25');
+				marker.setAttribute('refY','22');
+				marker.setAttribute('markerUnits','strokeWidth');
+				marker.setAttribute('orient','auto');
+				var markerElement = document.createElementNS(ns,'text');
+				markerElement.setAttribute('x','25');
+				markerElement.setAttribute('y','25');
+				markerElement.setAttribute('text-anchor','middle');
+				markerElement.setAttribute('dominant-baseline','middle');
+				markerElement.setAttribute('font-size','40');
+				markerElement.setAttribute('stroke-width','1');
+				markerElement.setAttribute('stroke',`${defaultProperties.strokeColor}`);
+				markerElement.setAttribute('fill',`${defaultProperties.fillColor}`);
+				markerElement.innerHTML=`&#${defaultProperties.midMarker.split('-')[0]}`;
+				marker.append(markerElement);
+				svg.getElementsByTagName('defs')[0].append(marker);
+			};
+		};
+		
+		var endMarkerIn = document.createElement('select');
+		endMarkerIn.id = 'attrIn';
+		strokeOptionsDB.append(document.createTextNode('End Marker'));
+		strokeOptionsDB.append(document.createElement('br'));
+        strokeOptionsDB.append(endMarkerIn);
+        strokeOptionsDB.append(document.createElement('hr'));
+		markerList.forEach((opt)=>{
+			var option = document.createElement('option');
+            option.innerHTML = opt=='none'?'None':`&#${opt}`;
+            option.value = opt=='none'?'none':`${opt}-${defaultProperties.strokeColor.slice(1)}${defaultProperties.fillColor.slice(1)}`;
+            endMarkerIn.append(option);
+			if(opt==defaultProperties.endMarker.split('-')[0]){option.setAttribute('selected','')};
+		});
+		
+        endMarkerIn.oninput = () => { 
+			defaultProperties.endMarker = endMarkerIn.value;
+			if(defaultProperties.endMarker!='none'){
+				var marker = document.createElementNS(ns,'marker');
+				marker.id = `endMarker${defaultProperties.endMarker}`;
+				removeById(marker.id);
+				marker.setAttribute('viewBox','0 0 50 50');
+				marker.setAttribute('markerWidth','50');
+				marker.setAttribute('markerHeight','50');
+				marker.setAttribute('refX','25');
+				marker.setAttribute('refY','22');
+				marker.setAttribute('markerUnits','strokeWidth');
+				marker.setAttribute('orient','auto');
+				var markerElement = document.createElementNS(ns,'text');
+				markerElement.setAttribute('x','25');
+				markerElement.setAttribute('y','25');
+				markerElement.setAttribute('text-anchor','middle');
+				markerElement.setAttribute('dominant-baseline','middle');
+				markerElement.setAttribute('font-size','40');
+				markerElement.setAttribute('stroke-width','1');
+				markerElement.setAttribute('stroke',`${defaultProperties.strokeColor}`);
+				markerElement.setAttribute('fill',`${defaultProperties.fillColor}`);
+				markerElement.innerHTML=`&#${defaultProperties.endMarker.split('-')[0]}`;
+				marker.append(markerElement);
+				svg.getElementsByTagName('defs')[0].append(marker);
+			};
+		};
+		
         var strokeDashArrayIn = document.createElement('input');
         strokeDashArrayIn.id = 'attrIn';
+		strokeDashArrayIn.value = defaultProperties.strokeDashArray;
         strokeOptionsDB.append(document.createTextNode('Dash Array'));
         strokeOptionsDB.append(strokeDashArrayIn);
         strokeOptionsDB.append(document.createElement('hr'));
-        strokeDashArrayIn.oninput = () => { strokeDashArray = strokeDashArrayIn.value };
+        strokeDashArrayIn.oninput = () => { defaultProperties.strokeDashArray = strokeDashArrayIn.value };
 
         var strokeDashOffsetIn = document.createElement('input');
         strokeDashOffsetIn.id = 'attrIn';
         strokeDashOffsetIn.setAttribute('type', 'number');
+		strokeDashOffsetIn.value = defaultProperties.strokeDashOffset;
         strokeOptionsDB.append(document.createTextNode('Dash Offset'));
         strokeOptionsDB.append(strokeDashOffsetIn);
         strokeOptionsDB.append(document.createElement('hr'));
-        strokeDashOffsetIn.oninput = () => { strokeDashOffset = strokeDashOffsetIn.value };
+        strokeDashOffsetIn.oninput = () => { defaultProperties.strokeDashOffset = strokeDashOffsetIn.value };
 
         var strokeLineJoinIn = document.createElement('select');
         ['miter', 'round', 'bevel'].forEach((opt) => {
@@ -327,13 +460,14 @@ strokeWidthIcon.addEventListener('click', (e) => {
             option.innerText = opt;
             option.value = opt;
             strokeLineJoinIn.append(option);
+			if(opt==defaultProperties.strokeLineJoin){option.setAttribute('selected','')};
         });
         strokeLineJoinIn.id = 'attrIn';
         strokeOptionsDB.append(document.createTextNode('Line Join'));
         strokeOptionsDB.append(document.createElement('br'));
         strokeOptionsDB.append(strokeLineJoinIn);
         strokeOptionsDB.append(document.createElement('hr'));
-        strokeLineJoinIn.oninput = () => { strokeLineJoin = strokeLineJoinIn.value };
+        strokeLineJoinIn.oninput = () => { defaultProperties.strokeLineJoin = strokeLineJoinIn.value };
 
         var strokeLineCapIn = document.createElement('select');
         ['butt', 'round', 'square'].forEach((opt) => {
@@ -341,20 +475,22 @@ strokeWidthIcon.addEventListener('click', (e) => {
             option.innerText = opt;
             option.value = opt;
             strokeLineCapIn.append(option);
+			if(opt==defaultProperties.strokeLineCap){option.setAttribute('selected','')};
         });
         strokeLineCapIn.id = 'attrIn';
         strokeOptionsDB.append(document.createTextNode('Line Cap'));
         strokeOptionsDB.append(document.createElement('br'));
         strokeOptionsDB.append(strokeLineCapIn);
         strokeOptionsDB.append(document.createElement('hr'));
-        strokeLineCapIn.oninput = () => { strokeLineCap = strokeLineCapIn.value };
+        strokeLineCapIn.oninput = () => { defaultProperties.strokeLineCap = strokeLineCapIn.value };
 
         var scaleStrokeIn = document.createElement('input');
         scaleStrokeIn.setAttribute('type', 'checkbox');
         strokeOptionsDB.append(document.createTextNode('Donot Scale Stroke'));
         strokeOptionsDB.append(scaleStrokeIn);
         strokeOptionsDB.append(document.createElement('hr'));
-        scaleStrokeIn.oninput = () => { nonScalingStroke = scaleStrokeIn.checked };
+		if(defaultProperties.nonScalingStroke){scaleStrokeIn.setAttribute('checked','true')};
+        scaleStrokeIn.oninput = () => { defaultProperties.nonScalingStroke = scaleStrokeIn.checked };
 
         document.body.append(strokeOptionsDB);
         addToolTip(strokeOptionsDB, 'Stroke Properties');
@@ -376,6 +512,10 @@ workingArea.addEventListener('click', (event) => {
         removeById('objIn');
         removeById('editTable');
         if (activeTool == 'addObj') { pressEsc(); };
+		if (activeTool == null) { 
+			shapeToolBar.remove(); 
+			removeById('tempInput');
+		};
     };
 });
 

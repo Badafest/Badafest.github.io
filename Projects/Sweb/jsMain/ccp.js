@@ -23,7 +23,7 @@ const objsBounded = (x, y, w, h) => {
     var objs = Array.from(svg.childNodes);
     return objs.filter((o) => {
         var bb = o.getBoundingClientRect();
-        if (bb && bb.width * bb.height > 0) {
+        if (bb && (bb.width + bb.height) > 0) {
             return bb.x > x && bb.y > y && bb.x + bb.width < x + w && bb.y + bb.height < y + h;
         } else {
             return false;
@@ -142,7 +142,7 @@ workingArea.addEventListener('mousemove', () => {
         var cpF = activeTool == 'copy' ? copyObject : duplicateObject;
         var A = coordinates.innerText.split(', ');
         var clnItms = Array.from(selectedGroup.childNodes).map((x) => {
-            return cpF(x, A[0] - selectedGroup.getBoundingClientRect().x / svgUnits, A[1] - selectedGroup.getBoundingClientRect().y / svgUnits);
+            return cpF(x, A[0] - selectedGroup.getBBox().x, A[1] - selectedGroup.getBBox().y);
         });
         var temp = groupItems(clnItms);
         temp.id = 'copyObj';

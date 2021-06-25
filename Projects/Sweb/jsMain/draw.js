@@ -4,6 +4,7 @@ var drawArcIcon = document.getElementById('drawArc');
 var drawFreeIcon = document.getElementById('drawFree');
 var drawEllipseIcon = document.getElementById('drawEllipse');
 var drawRectIcon = document.getElementById('drawRect');
+var drawShapeIcon = document.getElementById('drawShape');
 var drawTextIcon = document.getElementById('drawText');
 var drawTexIcon = document.getElementById('drawTex');
 var drawImgIcon = document.getElementById('drawImg');
@@ -184,15 +185,18 @@ const addObject = (type, attributes, textContent = '') => {
     obj.setAttribute('fill', getFillColor());
     obj.setAttribute('stroke', getStrokeColor());
     obj.setAttribute('stroke-width', getStrokeWidth());
-    if (strokeDashArray.length) {
-        obj.setAttribute('stroke-dasharray', strokeDashArray);
-        if (strokeDashOffset.length) {
-            obj.setAttribute('stroke-dashoffset', strokeDashOffset);
+    if (defaultProperties.strokeDashArray.length) {
+        obj.setAttribute('stroke-dasharray', defaultProperties.strokeDashArray);
+        if (defaultProperties.strokeDashOffset.length) {
+            obj.setAttribute('stroke-dashoffset', defaultProperties.strokeDashOffset);
         };
     };
-    if (strokeLineJoin != 'miter') { obj.setAttribute('stroke-linejoin', strokeLineJoin) };
-    if (strokeLineCap != 'butt') { obj.setAttribute('stroke-linecap', strokeLineCap) };
-    if (nonScalingStroke) { obj.setAttribute('vector-effect', 'non-scaling-stroke') };
+    if (defaultProperties.strokeLineJoin != 'miter') { obj.setAttribute('stroke-linejoin', defaultProperties.strokeLineJoin) };
+    if (defaultProperties.strokeLineCap != 'butt') { obj.setAttribute('stroke-linecap', defaultProperties.strokeLineCap) };
+    if (defaultProperties.nonScalingStroke) { obj.setAttribute('vector-effect', 'non-scaling-stroke') };
+	if (defaultProperties.startMarker!='none'){obj.setAttribute('marker-start',`url(#startMarker${defaultProperties.startMarker})`)};
+	if (defaultProperties.midMarker!='none'){obj.setAttribute('marker-mid',`url(#midMarker${defaultProperties.midMarker})`)};
+	if (defaultProperties.endMarker!='none'){obj.setAttribute('marker-end',`url(#endMarker${defaultProperties.endMarker})`)};
     obj.setAttribute('opacity', 1);
     obj.setAttribute('scene', activeScene);
 
@@ -201,7 +205,7 @@ const addObject = (type, attributes, textContent = '') => {
     }
     obj.innerHTML = textContent;
     svg.append(obj);
-    if (obj.getBBox && (obj.getBBox().width == 0 || obj.getBBox().height == 0) && ['use', 'text', 'polyline', 'path', 'line'].indexOf(obj.tagName) == -1) {
+    if (obj.getBBox && (obj.getBBox().width + obj.getBBox().height) == 0 && obj.tagName!='text') {
         obj.remove();
     } else {
         obj.addEventListener('click', (event) => { editObject(event, obj) });
@@ -403,6 +407,16 @@ workingArea.addEventListener('click', (evt) => {
         var B = clickedCoordinates[clickedCoordinates.length - 2].split(', ');
         var C = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
         drawRect(A, B, C);
+    } else if (activeTool == 'hrr' && clickedCoordinates.length > 2 && clickedCoordinates.length % 3 == 0) {
+		var A = clickedCoordinates[clickedCoordinates.length - 3].split(', ');
+        var B = clickedCoordinates[clickedCoordinates.length - 2].split(', ');
+		var C = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
+        drawHollowRoundedRectange(A, B, C);
+    } else if (activeTool == 'ps' && clickedCoordinates.length > 2 && clickedCoordinates.length % 3 == 0) {
+		var A = clickedCoordinates[clickedCoordinates.length - 3].split(', ');
+        var B = clickedCoordinates[clickedCoordinates.length - 2].split(', ');
+		var C = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
+        drawPolygonStar(A, B, C);
     } else if (activeTool == 'text' && clickedCoordinates.length > 1 && clickedCoordinates.length % 2 == 0) {
         var A = clickedCoordinates[clickedCoordinates.length - 2].split(', ');
         var B = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
@@ -513,6 +527,32 @@ workingArea.addEventListener('mousemove', () => {
                 var B = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
                 var C = coordinates.innerText.split(', ');
                 var tempRect = drawRect(A, B, C);
+                tempRect.id = 'tempObj';
+            };
+        } else if (activeTool == 'hrr') {
+            if (clickedCoordinates.length % 3 == 1) {
+                var A = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
+                var B = coordinates.innerText.split(', ');
+                var tempRect = drawHollowRoundedRectange(A, B);
+                tempRect.id = 'tempObj';
+            } else if (clickedCoordinates.length % 3 == 2) {
+                var A = clickedCoordinates[clickedCoordinates.length - 2].split(', ');
+                var B = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
+                var C = coordinates.innerText.split(', ');
+                var tempRect = drawHollowRoundedRectange(A, B, C);
+                tempRect.id = 'tempObj';
+            };
+        } else if (activeTool == 'ps') {
+            if (clickedCoordinates.length % 3 == 1) {
+                var A = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
+                var B = coordinates.innerText.split(', ');
+                var tempRect = drawPolygonStar(A, B);
+                tempRect.id = 'tempObj';
+            } else if (clickedCoordinates.length % 3 == 2) {
+                var A = clickedCoordinates[clickedCoordinates.length - 2].split(', ');
+                var B = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
+                var C = coordinates.innerText.split(', ');
+                var tempRect = drawPolygonStar(A, B, C);
                 tempRect.id = 'tempObj';
             };
         } else if (activeTool == 'text') {
@@ -699,7 +739,7 @@ drawLineIcon.addEventListener('click', () => {
     activeTool = 'line';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: Polyline.`, null);
+    openActionMsg(`Active Tool: Polyline`, null);
 });
 
 drawPathIcon.addEventListener('click', () => {
@@ -709,7 +749,7 @@ drawPathIcon.addEventListener('click', () => {
     activeTool = 'path';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: Path.`, null);
+    openActionMsg(`Active Tool: Path`, null);
 });
 
 drawArcIcon.addEventListener('click', () => {
@@ -719,7 +759,7 @@ drawArcIcon.addEventListener('click', () => {
     activeTool = 'arc';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: Arc Path.`, null);
+    openActionMsg(`Active Tool: Arc Path`, null);
 });
 
 drawFreeIcon.addEventListener('click', () => {
@@ -729,7 +769,7 @@ drawFreeIcon.addEventListener('click', () => {
     activeTool = 'free';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: Free Path.`, null);
+    openActionMsg(`Active Tool: Free Path`, null);
 });
 
 drawEllipseIcon.addEventListener('click', () => {
@@ -739,17 +779,22 @@ drawEllipseIcon.addEventListener('click', () => {
     activeTool = 'ellipse';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: Ellipse.`, null);
+    openActionMsg(`Active Tool: Ellipse`, null);
 });
 
 drawRectIcon.addEventListener('click', () => {
     pressEsc();
-    lastClickedIcon = drawRectIcon;
+	lastClickedIcon = drawRectIcon;
     clickedCoordinates = [];
     activeTool = 'rect';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: Rectangle.`, null);
+    openActionMsg(`Active Tool: Rectangle`, null);
+});
+
+drawShapeIcon.addEventListener('click', () => {
+	removeById('shapeToolbar');
+	document.body.append(shapeToolBar);
 });
 
 drawTextIcon.addEventListener('click', () => {
@@ -759,7 +804,7 @@ drawTextIcon.addEventListener('click', () => {
     activeTool = 'text';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: Text.`, null);
+    openActionMsg(`Active Tool: Text`, null);
 });
 
 drawTexIcon.addEventListener('click', () => {
@@ -770,7 +815,7 @@ drawTexIcon.addEventListener('click', () => {
     activeTool = 'tex';
     removeById('tempObj');
     waitForPoint();
-    openActionMsg(`Active Tool: LaTeX.`, null);
+    openActionMsg(`Active Tool: LaTeX`, null);
 });
 
 drawImgIcon.addEventListener('click', () => {
@@ -806,7 +851,7 @@ document.addEventListener('keydown', (event) => {
         removeById('objIn');
         removeById('imgUpload');
         removeById('freePath');
-        freePath = null;
+		freePath = null;
         drawFree = false;
         freePathPoints = [];
         gObjs = [];
@@ -820,7 +865,14 @@ document.addEventListener('keydown', (event) => {
             gObjs = [];
             activeTool = null;
         };
-        if (!(document.getElementById('editTable') || document.getElementById('objIn')) && lastClickedIcon) { lastClickedIcon.click(); }
+        if (!(document.getElementById('editTable') || document.getElementById('objIn')) && lastClickedIcon) {
+			var tempCoords;
+			if(clickedCoordinates.length){
+				tempCoords = clickedCoordinates[clickedCoordinates.length-activeTool=='path'?2:1];
+			};
+			lastClickedIcon.click();
+			clickedCoordinates=[tempCoords];	
+		};
     };
 });
 
@@ -831,9 +883,9 @@ const groupItems = (objs) => {
         x.remove();
     };
     var g = addObject('g', {}, htmlText);
-    g.removeAttribute('fill');
-    g.removeAttribute('stroke');
-    g.removeAttribute('stroke-width');
+	for(let x in defaultProperties){
+		g.removeAttribute(x);
+	}
     return g;
 };
 

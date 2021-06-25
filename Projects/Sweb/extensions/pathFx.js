@@ -419,7 +419,7 @@ const mergePaths = (obj, ref) => {
         var m = obj.getCTM();
         var points = [...TdObj.matchAll(/[A-Z]\s?[0-9|\s|.]+/g)];
         var dObj = '';
-        for (x in points) {
+        for (let x in points) {
             var pt = points[x];
             var ptList = pt[0].slice(1).split(/\s/).map((x) => { return parseFloat(x) }).filter((x) => { return x == 0 || x });
             var outPtList = [];
