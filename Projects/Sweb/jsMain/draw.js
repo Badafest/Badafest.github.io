@@ -867,8 +867,9 @@ document.addEventListener('keydown', (event) => {
         };
         if (!(document.getElementById('editTable') || document.getElementById('objIn')) && lastClickedIcon) {
 			var tempCoords;
-			if(clickedCoordinates.length){
-				tempCoords = clickedCoordinates[clickedCoordinates.length-activeTool=='path'?2:1];
+			var x = clickedCoordinates.length;
+			if(x){
+				tempCoords = clickedCoordinates[x-((activeTool=='path'&&x>1)?2:1)];
 			};
 			lastClickedIcon.click();
 			clickedCoordinates=[tempCoords];	

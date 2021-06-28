@@ -4,7 +4,29 @@ var activeDataIndex = null;
 var activeDataLen = null;
 var activePathDataAttr = null;
 var originalPathData = null;
-var activePathTransform = null;
+
+const removeTransformFromPath = (obj) => {
+	var m = obj.getCTM();
+	var TdObj = obj.getAttribute('d');
+	var points = [...TdObj.matchAll(/[A-Z]?\s?[-\d.\s]+/g)];
+	var dObj = '';
+	for (var x in points) {
+		var pt = points[x];
+		var ptList = pt[0].slice(1).split(/\s/).map((x) => { return parseFloat(x) }).filter((x) => { return x == 0 || x });
+		var outPtList = [];
+		if (ptList.length % 2 == 0) {
+			for (i = 0; i < ptList.length; i += 2) {
+				outPtList.push(getScreenPoint([ptList[i], ptList[i + 1]], m).join(' '));
+			}
+		} else if (ptList.length == 7) {
+			outPtList = [ptList.slice(0, 2).join(' '), ptList.slice(2, 5).join(' '), getScreenPoint([ptList[5], ptList[6]], m).join(' ')];
+		}
+		var index = pt.index;
+		dObj += pt[0][0] + '\n' + outPtList.join('\n') + '\n';
+		};
+	obj.setAttribute('d',dObj);
+	obj.removeAttribute('transform');
+};
 
 const drawPtHandle = (point, index) => {
     var pt = point.split(/\s/);
@@ -26,8 +48,8 @@ const drawPtHandle = (point, index) => {
 const editPath = (path) => {
     activeEditPath = path;
     activePathDataAttr = path.getAttribute('d') ? 'd' : 'points';
-    activePathTransform = path.getAttribute('transform');
     if (!/[a-z]/.exec(activeEditPath.getAttribute(activePathDataAttr))) {
+		removeTransformFromPath(path);
         var pathEditorHandle = document.createElementNS(ns, 'ellipse');
         pathEditorHandle.setAttribute('fill', 'white');
         pathEditorHandle.setAttribute('stroke-width', 1 / svgUnits);
@@ -51,10 +73,7 @@ const editPath = (path) => {
         pathTangents.append(pathTangent2);
         pathTangents.id = 'pathTangents';
         svg.append(pathTangents);
-
-        activeEditPath.removeAttribute('transform');
-
-        activeTool = 'editPath';
+		activeTool = 'editPath';
         openActionMsg(`Active Tool: Edit Path`, null);
         editPathFx();
     };
@@ -68,7 +87,6 @@ const editPathFx = () => {
     originalPathData = originalPathData || data;
 
     var points = [...data.matchAll(/[A-Z]?\s?[-\d.\s]+/g)];
-    console.log(points);
     var tPt = 'M';
 
     points.forEach((point) => {
@@ -80,13 +98,13 @@ const editPathFx = () => {
             var pts = [...point[0].matchAll(/[-\d.]+\s[-\d.]+/g)];
             pts.forEach((pt) => {
                 drawPtHandle(pt[0], point.index + pt.index);
-                tPt += ' ' + pts.join(' ');
             });
+			tPt += ' ' + pts.join(' ');
         }
     });
+	
     svg.getElementById('pathTangents').childNodes.forEach((z) => z.setAttribute('d', tPt));
-
-}
+};
 
 workingArea.addEventListener('mousemove', () => {
     if (activePathHandle) {
@@ -102,7 +120,6 @@ document.addEventListener('keydown', (e) => {
     if (e.key == 'Escape') {
         if (activeEditPath) {
             activeEditPath.setAttribute(activePathDataAttr, originalPathData);
-            activeEditPath.setAttribute('transform', activePathTransform || '');
         };
         originalPathData = null;
         activeEditPath = null;

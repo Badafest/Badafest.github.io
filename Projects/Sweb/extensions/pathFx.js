@@ -413,27 +413,8 @@ const getScreenPoint = (point, matrix) => {
 };
 
 const mergePaths = (obj, ref) => {
-    var TdObj = obj.getAttribute('d');
-    var dRef = ref.getAttribute('d');
-    if (dRef && TdObj) {
-        var m = obj.getCTM();
-        var points = [...TdObj.matchAll(/[A-Z]\s?[0-9|\s|.]+/g)];
-        var dObj = '';
-        for (let x in points) {
-            var pt = points[x];
-            var ptList = pt[0].slice(1).split(/\s/).map((x) => { return parseFloat(x) }).filter((x) => { return x == 0 || x });
-            var outPtList = [];
-            if (ptList.length % 2 == 0) {
-                for (i = 0; i < ptList.length; i += 2) {
-                    outPtList.push(getScreenPoint([ptList[i], ptList[i + 1]], m).join(' '));
-                }
-            } else if (ptList.length == 7) {
-                outPtList = [ptList.slice(0, 2).join(' '), ptList.slice(2, 5).join(' '), getScreenPoint([ptList[5], ptList[6]], m).join(' ')];
-            }
-            var index = pt.index;
-            dObj += pt[0][0] + '\n' + outPtList.join('\n') + '\n' + TdObj.slice(index + pt[0].length, index + pt[0].length + points[x + 1] ? points[x + 1].index : 0);
-        };
-        ref.setAttribute('d', `${dRef}\n${dObj}`);
-        obj.remove();
-    };
+	removeTransformFromPath(obj);
+	removeTransformFromPath(ref);
+	ref.setAttribute('d',ref.getAttribute('d')+'\n'+obj.getAttribute('d'));
+	obj.remove();
 };
