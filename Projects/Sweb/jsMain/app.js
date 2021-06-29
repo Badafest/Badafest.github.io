@@ -549,7 +549,7 @@ resetSvg.addEventListener('click', () => {
     console.clear();
     pressEsc();
     var svg = document.getElementById('svg');
-    var tempGroup = groupItems(Array.from(svg.childNodes).filter((x) => { return ['majorGrid', 'minorGrid'].indexOf(x.id) == -1 && ['defs', 'style'].indexOf(x.tagName) == -1 }));
+    var tempGroup = groupItems(Array.from(svg.childNodes).filter((x) => { return ['majorGrid', 'minorGrid'].indexOf(x.id) == -1 && ['defs', 'style'].indexOf(x.tagName) == -1 && x.getAttribute('scene')==activeScene}));
     var bBox = tempGroup.getBoundingClientRect();
     var newUnits = bBox.height || bBox.width ? svgUnits * Math.min(workingArea.clientWidth / bBox.width, workingArea.clientHeight / bBox.height) : 2;
     var panX = bBox.width ? bBox.x - (window.innerWidth - bBox.width) / 2 : 0;

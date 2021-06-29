@@ -20,7 +20,7 @@ const duplicateObject = (obj, dX = 0, dY = 0) => {
 };
 
 const objsBounded = (x, y, w, h) => {
-    var objs = Array.from(svg.childNodes);
+    var objs = Array.from(svg.childNodes).filter((x)=>{return x.getAttribute('scene')==activeScene});
     return objs.filter((o) => {
         var bb = o.getBoundingClientRect();
         if (bb && (bb.width + bb.height) > 0) {

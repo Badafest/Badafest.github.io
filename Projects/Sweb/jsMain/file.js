@@ -254,7 +254,7 @@ const svgImg = (format = 'svg') => {
             }
         });
     };
-    var svgBlob = new Blob([ser.serializeToString(format == 'svg' ? svg : svgClone)], { type: "image/svg+xml;charset=utf-8" });
+    var svgBlob = new Blob([ser.serializeToString(format == 'svg' ? svg.cloneNode(true) : svgClone)], { type: "image/svg+xml;charset=utf-8" });
     return svgBlob;
 };
 
@@ -307,6 +307,7 @@ const openSvg = (svgNew) => {
     });
     defaultImgWidth = svg.clientWidth;
     defaultImgHeight = svg.clientHeight;
+	initScenes();
 };
 
 const initializePngImg = (imgSvg) => {

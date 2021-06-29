@@ -901,13 +901,16 @@ const ungroupItems = (group) => {
         var attDict = {...gAttDict };
         var attrNames = obj.getAttributeNames();
         for (attrName of attrNames) {
-            attDict[attrName] = obj.getAttribute(attrName);
+			attDict[attrName] = obj.getAttribute(attrName);
         };
         var tobj = addObject(obj.tagName, attDict, obj.innerHTML);
+		tobj.getAttributeNames().forEach((x)=>{
+			if(Object.keys(attDict).indexOf(x)==-1){
+				tobj.removeAttribute(x);
+			}
+		})
         if (tobj.tagName == 'g') {
-            tobj.removeAttribute('fill');
-            tobj.removeAttribute('stroke');
-            tobj.removeAttribute('stroke-width');
+			Object.keys(defaultProperties).forEach((x)=>{tobj.removeAttribute(x)});
         };
     };
     removeObjects(group);
