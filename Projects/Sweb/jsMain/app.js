@@ -1,12 +1,3 @@
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function() {
-    navigator.serviceWorker
-      .register("https://badafest.github.io/Projects/Sweb/serviceWorker.js")
-      .then(res => console.log("service worker registered"))
-      .catch(err => console.log("service worker not registered", err))
-  })
-}
-
 const defaultProperties = {
 	fillColor : '#ffffff',
 	strokeColor : '#000000',
