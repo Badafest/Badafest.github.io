@@ -65,6 +65,7 @@ document.getElementById('modeIcon').addEventListener('click', () => {
         document.getElementById('editModeIcon').style.display = 'none';
         document.getElementById('presentMenu').style.display = '';
     } else {
+		Array.from(svg.getElementsByClassName('markerPath')).forEach((x)=>{x.remove();});
         currMode = 'edit';
         Array.from(document.getElementsByClassName('menu')).forEach((x) => {
             x.style.display = '';
@@ -178,6 +179,27 @@ document.getElementById('mergeScene').addEventListener('click', () => {
         changeScene(activeScene - 1);
         maxScene -= 1;
     };
+});
+
+var markerPenIcon = document.getElementById('presentMarkerPen');
+markerPenIcon.addEventListener('click',()=>{
+	pressEsc();
+    lastClickedIcon = markerPenIcon;
+    clickedCoordinates = [];
+    activeTool = 'pen';
+    removeById('tempObj');
+    waitForPoint();
+	openActionMsg('Active Tool: Marker Pen');
+});
+
+var erasePenIcon = document.getElementById('presentErasePen');
+erasePenIcon.addEventListener('click',()=>{
+	pressEsc();
+    lastClickedIcon = erasePenIcon;
+    clickedCoordinates = [];
+    activeTool = 'erase';
+    removeById('tempObj');
+	openActionMsg('Active Tool: Erase Pen');
 });
 
 presentPlayPauseBtn.addEventListener('click', () => {

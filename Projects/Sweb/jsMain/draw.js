@@ -20,18 +20,6 @@ var groupIcon = document.getElementById('group');
 var gObjs = [];
 var lastClickedIcon = null;
 
-const getFillColor = () => {
-    return fillColorIcon.value;
-};
-
-const getStrokeColor = () => {
-    return strokeColorIcon.value;
-};
-
-const getStrokeWidth = () => {
-    return document.getElementById('strokeValueOutput').innerHTML;
-};
-
 var clickedCoordinates = [];
 
 const editObject = (event, object) => {
@@ -181,10 +169,9 @@ const editObject = (event, object) => {
 
 const addObject = (type, attributes, textContent = '') => {
     var obj = document.createElementNS(ns, type);
-
-    obj.setAttribute('fill', getFillColor());
-    obj.setAttribute('stroke', getStrokeColor());
-    obj.setAttribute('stroke-width', getStrokeWidth());
+	obj.setAttribute('fill', defaultProperties.fillColor);
+    obj.setAttribute('stroke', defaultProperties.strokeColor);
+    obj.setAttribute('stroke-width', defaultProperties.strokeWidth);
     if (defaultProperties.strokeDashArray.length) {
         obj.setAttribute('stroke-dasharray', defaultProperties.strokeDashArray);
         if (defaultProperties.strokeDashOffset.length) {
@@ -215,7 +202,7 @@ const addObject = (type, attributes, textContent = '') => {
     return obj;
 };
 
-var bBoxReqdTools = [null, 'transform', 'painter', 'group', 'gradient', 'animate', 'addObj'];
+var bBoxReqdTools = [null, 'transform', 'painter', 'group', 'gradient', 'animate', 'addObj', 'erase'];
 const drawBoundingBox = (obj) => {
     removeById('boundingBox');
     var bbox = obj.getBoundingClientRect();
@@ -386,19 +373,22 @@ workingArea.addEventListener('click', (evt) => {
             var B = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
             drawPath(A, B, null, null, activeObj);
         };
-    } else if (activeTool == 'free') {
+    } else if (activeTool == 'free'||activeTool == 'pen') {
         if (clickedCoordinates.length == 1) {
             drawFree = true;
             freePathPoints.push(clickedCoordinates[0].split(', '));
-
         } else if (clickedCoordinates.length == 2) {
             clickedCoordinates = [];
             drawFree = false;
             freePathPoints = [];
             document.getElementById('freePath').removeAttribute('id');
-
         }
-    } else if (activeTool == 'ellipse' && clickedCoordinates.length > 1 && clickedCoordinates.length % 2 == 0) {
+    } else if(activeTool == 'erase'){
+		if (evt.target.getAttribute('class')=='markerPath') {
+			evt.target.remove();
+			removeById('boundingBox');
+		};
+	} else if (activeTool == 'ellipse' && clickedCoordinates.length > 1 && clickedCoordinates.length % 2 == 0) {
         var A = clickedCoordinates[clickedCoordinates.length - 2].split(', ');
         var B = clickedCoordinates[clickedCoordinates.length - 1].split(', ');
         drawEllipse(A, B);
@@ -497,13 +487,17 @@ workingArea.addEventListener('mousemove', () => {
                 tempLine.id = 'tempObj';
                 tempLine.style.fill = 'none';
             };
-        } else if (activeTool == 'free' && drawFree) {
+        } else if ((activeTool == 'free'||activeTool == 'pen') && drawFree) {
             var newPoint = coordinates.innerText.split(', ');
             var lastPoint = freePathPoints[freePathPoints.length - 1];
             if (Math.hypot(newPoint[0] - lastPoint[0], newPoint[1] - lastPoint[1]) * svgUnits > smoothFreePathVal) {
                 freePathPoints.push(coordinates.innerText.split(', '));
                 if (freePathPoints.length == 4 && (document.getElementById('freePath') == null || document.getElementById('freePath') == undefined)) {
                     var freePath = drawPath(freePathPoints[0], freePathPoints[3], freePathPoints[1], freePathPoints[2]);
+					if (activeTool=='pen'){
+						freePath.setAttribute('fill','none');
+						freePath.setAttribute('class','markerPath');
+					};
                     freePath.id = 'freePath';
                 } else if (freePathPoints.length > 4 && (freePathPoints.length - 4) % 2 == 0) {
                     drawPath(freePathPoints[freePathPoints.length - 1], freePathPoints[freePathPoints.length - 2], null, null, document.getElementById('freePath'));

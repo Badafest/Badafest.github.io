@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sweb | SVG Editor on Web</title>
+	<link rel='manifest' href='manifest.json'>
     <link rel='icon' href='./sweb.svg'>
     <link rel='stylesheet' href='./style.css'>
 </head>
@@ -24,7 +25,7 @@
         <p class='seperator'>|</p>
         <div id='addScene' class='drawIcon' style="font-size: 24px;">+</div>
         <div id='mergeScene' class='drawIcon' style="font-size: 24px;">&#xd7</div>
-    </div>
+	</div>
     <div id='toolBar' class='menu'>
         <input type='color' height='28px' id='fillColorIcon' class='icon' value="#ffffff">
         <input type='color' height='28px' id='strokeColorIcon' class='icon' value="#000000">
@@ -299,9 +300,12 @@
     <div id='pallete' class='menu'>
     </div>
     <div id='presentMenu' class='menu' style='display:none; opacity:0'>
-        <div id='presentPrevScene' class='drawIcon' style="font-size: 24px;">&#171</div>
+        <div id='presentPrevScene' class='drawIcon' style="color:rgb(90,90,90); font-size: 24px;">&#171</div>
         <div id='presentPlayPause' class='drawIcon' style="color:rgb(90,90,90); font-size: 24px;">&#x25b6</div>
-        <div id='presentNextScene' class='drawIcon' style="font-size: 24px;">&#187</div>
+        <div id='presentNextScene' class='drawIcon' style="color:rgb(90,90,90); font-size: 24px;">&#187</div>
+		<p class='seperator'>|</p>
+		<div id='presentMarkerPen' class='drawIcon' style="color:rgb(90,90,90); font-size: 22px;">&#9998</div>
+		<div id='presentErasePen' class='drawIcon' style="color:rgb(90,90,90); font-size: 22px;">&#x2718</div>
     </div>
     <div id='animClock' style='display:none; opacity:0'>00:00.0</div>
     <script src=' ./jsMain/message.js '></script>

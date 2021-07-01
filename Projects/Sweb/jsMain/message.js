@@ -122,3 +122,5 @@ addToolTip(document.getElementById('mergeScene'), 'Merge Last Scene to Second La
 addToolTip(document.getElementById('presentPrevScene'), 'Previous Scene', 'top');
 addToolTip(document.getElementById('presentNextScene'), 'Next Scene', 'top');
 addToolTip(document.getElementById('presentPlayPause'), 'Play | Pause', 'top');
+addToolTip(document.getElementById('presentMarkerPen'), 'Marker Pen', 'top');
+addToolTip(document.getElementById('presentErasePen'), 'Erase Pen', 'top');

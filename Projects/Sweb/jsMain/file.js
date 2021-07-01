@@ -10,6 +10,16 @@ var jpegQuality = null;
 var defaultImgWidth = svg.clientWidth;
 var defaultImgHeight = svg.clientHeight;
 
+const removeUnused = ()=>{
+	var defs = Array.from(svg.getElementsByTagName('defs'));
+	defs.forEach((def)=>{
+		var objs = Array.from(def.childNodes);
+		objs.forEach((obj)=>{
+			if(['minorGridPattern','majorGridPattern'].indexOf(obj.id)==-1&&!svg.innerHTML.match(`#${obj.id}`)){obj.remove();}
+		});
+	});
+};
+
 const updateSvgHistory = (latestSvg) => {
     if ([undefined, null].indexOf(svg.getElementById('tempObj')) != -1) {
         var lastSvg = svgHistory[svgHistory.length - 1];
@@ -207,6 +217,7 @@ const triggerDownload = (blob, fileName) => {
 };
 
 const svgImg = (format = 'svg') => {
+	removeUnused();
     var ser = new XMLSerializer();
     if (format != 'svg') {
         var svgClone = svg.cloneNode(true);
