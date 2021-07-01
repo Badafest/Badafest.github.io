@@ -1,10 +1,10 @@
 const swebCache = "sweb-cache";
 const assets = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/sweb.svg"
-]
+  "https://badafest.github.io/Projects/Sweb",
+  "https://badafest.github.io/Projects/Sweb/index.html",
+  "https://badafest.github.io/Projects/Sweb/style.css",
+  "https://badafest.github.io/Projects/Sweb/sweb.svg"
+];
 
 self.addEventListener("install", (installEvent) => {
   installEvent.waitUntil(
