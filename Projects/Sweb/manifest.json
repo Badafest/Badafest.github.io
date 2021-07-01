@@ -8,7 +8,7 @@
   "orientation": "landscape-primary",
   "icons": [
     {
-      "src": "/sweb.svg",
+      "src": "./sweb.svg",
       "type": "image/svg", "sizes": "any"
     }
   ]
