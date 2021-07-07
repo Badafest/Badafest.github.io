@@ -154,8 +154,7 @@ const plotFunction = (ox, oy, ax, fx, no = 20, x0 = 0, sx = majorGridSeparation,
 	}
 	
     var animParams = [...fx.matchAll(/\[[^\]]+\]/g)];
-	console.log(animParams);
-	
+
 	if(animParams.length){
 		pathId = `animFx${Math.round(Math.random()*1000)}`;
 		animObj = document.createElementNS(ns,'animate');
@@ -174,10 +173,8 @@ const plotFunction = (ox, oy, ax, fx, no = 20, x0 = 0, sx = majorGridSeparation,
 			var data = animParam[0].split(',');
 			var param = data[0].replace('[','');
 			var animDat = data[1].split(/\s/).sort((x,y)=>{return parseFloat(x.split('(')[1])-parseFloat(y.split('(')[1])});
-			console.log(animDat);
 			var animDatTimes = animDat.map((x)=>{return parseFloat(x.split('(')[1])}).filter((x)=>{return !isNaN(x)});
 			var animDatValues = animDat.map((x)=>{return parseFloat(x)}).filter((x)=>{return !isNaN(x)});
-			console.log(animDatTimes,animDatValues)
 			if(animDatTimes.length){
 				fromAnim = fromAnim||animDatTimes[0];
 				durAnim = durAnim||(animDatTimes[animDatTimes.length-1] - fromAnim);
@@ -194,16 +191,12 @@ const plotFunction = (ox, oy, ax, fx, no = 20, x0 = 0, sx = majorGridSeparation,
 				};
 			fxName = fxName.replace(animParam[0],`[${param}]`);
 		});
-		
-		console.log(fxName);
-		console.log(params);
                 
         for(let t=0;t<animTimes.split(';').length;t++){
             var tFx = fxName;
             Object.keys(params).forEach((param)=>{
                 tFx = tFx.replaceAll(`[${param}]`,params[param][t]);
             });
-            console.log(t,tFx);
             animValues += `${getPathData(tFx).replaceAll('\n',' ')};`;
         };
         
@@ -267,7 +260,7 @@ const plotFunction = (ox, oy, ax, fx, no = 20, x0 = 0, sx = majorGridSeparation,
     var yArrMax = addObject('path', { 'd': `M\n${ox} ${ayMax}\nl\n0 -${minorGridSeparation}\n${minorGridSeparation/4} 0\n-${minorGridSeparation/4} -${minorGridSeparation/2}\n-${minorGridSeparation/4} ${minorGridSeparation/2}\n${minorGridSeparation/4} 0` });
 
     var texSvg = MathJax.tex2svg(toLatex('y={' + fxName + '}')).childNodes[0];
-    texSvg.setAttribute('color', getStrokeColor());
+    texSvg.setAttribute('color', defaultProperties.strokeColor);
     var fReader = new FileReader();
     fReader.readAsDataURL(new Blob([new XMLSerializer().serializeToString(texSvg)], { type: "image/svg+xml;charset=utf-8" }));
     fReader.onloadend = (event) => {
