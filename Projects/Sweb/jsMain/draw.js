@@ -667,7 +667,7 @@ const drawTex = (A, content = '') => {
     var x = parseFloat(A[0]);
     var y = parseFloat(A[1]);
     var texSvg = MathJax.tex2svg(String(content)).childNodes[0];
-    texSvg.setAttribute('color', getStrokeColor());
+    texSvg.setAttribute('color', defaultProperties.strokeColor);
     var fReader = new FileReader();
     fReader.readAsDataURL(new Blob([new XMLSerializer().serializeToString(texSvg)], { type: "image/svg+xml;charset=utf-8" }));
     fReader.onloadend = (event) => {
