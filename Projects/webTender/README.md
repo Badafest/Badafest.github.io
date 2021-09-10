@@ -1,4 +1,4 @@
-# Web Tender - Tender Docuents
+# Web Tender - Tender Documents
 Web Tender is a document generator for tendering purposes. Right now, user may print documents on preview. Download option for docx and pdf format will be added in future.
 ##### Features
 + Simple to use User Form
