@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Web Tender Maker</title>
+	<link rel="stylesheet" href="./style.css">
+	<link rel="stylesheet" href="./article.css">
+</head>
+<body>
+<div id="menu">
+	<form action="" id="firmType">
+		<span>
+		<label for="single">Single</label>
+		<input id="single" type="radio" name="firmType" value="single">
+		</span>
+		<span>
+		<label for="jv">JV</label>
+		<input checked id="jv" type="radio" name="firmType" value="JV">
+		</span>
+	</form>
+	<form action="" id="previewDoc">
+		<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.25em" fill="currentColor" class="eyeIcon" viewBox="0 0 16 16">
+				<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+			<path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+		</svg>
+		<label for="preview" style="display:none">Preview</label>
+		<select name="preview" id="preview" style="margin-left:0.25em; width: 12em;">
+			<option value="letterOfBid">Letter of Bid</option>
+			<option value="letterOfPriceBid" selected>Letter of Price Bid</option>
+			<option value="letterOfTechBid">Letter of Technical Bid</option>
+			<option value="powerOfAttorney">Power of Attorney</option>
+			<option value="declareDoc">Declaration Document</option>
+		</select>
+	</form>
+</div>
+	<main id='main'>
+		<form action="" id='userForm'>
+			<label for="contractNameShort">Short Name of Contract</label>
+			<input type="text" name="contractNameShort" id="contractNameShort" placeholder="New Road Contract">
+			<label for="contractName">Full Name of Contract</label>
+			<input type="text" name="contractName" id="contractName" placeholder="A Contract on Beautiful New Road" required="true">
+			<label for="firmName">Firm Name / Full JV Name</label>
+			<input type="text" name="firmName" id="firmName" placeholder="Our Firm Name" required="true">
+			<label for="firmAddress">Firm Address</label>
+			<input type="text" name="firmAddress" id="firmAddress" placeholder="123 Nice Town, Good Country" required="true">
+			<label for="date">Date</label> 
+			<input type="date" name="date" id="date" required="true">
+			<label for="bidNo">Invitation for Bid No.</label>
+			<input type="text" name="bidNo" id="bidNo" placeholder="123 145 786" required="true">
+			<label for="contractId">Contract Identification No.</label>
+			<input type="text" name="contractId" id="contractId" placeholder="123 145 786" required="true">
+			<label for="to">To</label>
+			<textarea name="to" id="to" placeholder="John Doe" required="true"></textarea>
+			<label for="bidValidity">Bid Validity Period</label>
+			<input type="text" name="bidVal" id="bidVal" placeholder="12 days" required="true">
+			<label for="lineOfCredit">Line of Credit</label>
+			<input type="text" name="lineOfCredit" id="lineOfCredit" placeholder="Credit Given to John Doe" required="true">
+			<label for="authorized">Authorized Person</label>
+			<input type="text" name="authorized" id="authorized" placeholder="Darius Kincaid" required="true">
+			<div id="btnContainer">
+				<button type="reset">Reset</button>
+				<button type="button" id="printBtn">Print</button>
+			</div>
+		</form>
+		<div id="livePreview"></div>
+	</main>
+	<script type="text/javascript" src="./lob.js"></script>
+	<script type="text/javascript" src="./lopb.js"></script>
+	<script type="text/javascript" src="./lotb.js"></script>
+	<script type="text/javascript" src="./poa.js"></script>
+	<script type="text/javascript" src="./dbtb.js"></script>
+	<script type="text/javascript" src="./app.js"></script>
+</body>
+</html>

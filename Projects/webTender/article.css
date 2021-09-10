@@ -1,0 +1,121 @@
+article{
+	box-shadow: 0 0 1em -0.25em rgb(25,25,125);
+	border-radius: 0.5rem;
+	padding: 2em;
+	background: white;
+}
+
+article *{
+	text-align: justify;
+	line-height: 125%;
+}
+
+@media print{
+	article{
+		box-shadow: none;
+	}
+}
+
+span{
+	max-width: 10em;
+	overflow: hidden;
+}
+.center,
+.center *{
+	text-align: center;
+}
+
+.right,
+.right *{
+	text-align: right;
+}
+
+.bold,
+.bold *{
+	font-weight: bold;
+}
+
+.underline,
+.underline *{
+	text-decoration: underline;
+}
+
+.italics,
+.italice *{
+	font-style: italics;
+}
+
+.small{
+	font-size: 0.95em;
+}
+
+.smaller{
+	font-size: 0.9em;
+}
+
+.smallest{
+	font-size: 0.75em;
+}
+
+.normal {
+	font-size: 1em;
+}
+
+.large{
+	font-size: 1.1em;
+}
+
+.larger{
+	font-size: 1.25em;
+}
+
+.largest{
+	font-size: 1.5em;
+}
+
+.one-line-break{
+	margin-bottom: 1em;
+}
+
+.two-line-break{
+	margin-bottom: 2em;
+}
+
+.three-line-break{
+	margin-bottom: 3em;
+}
+
+ol.small-margin{
+	padding-left: 1.5em;
+}
+
+ol.large-margin{
+	padding-left: 2em;
+}
+
+ol.larger-margin{
+	padding-left: 2.5em;
+}
+
+li{
+	padding-left: 0.25rem;
+}
+
+span{
+	min-width: 3em;
+}
+
+thead *{
+	text-align: center;
+}
+
+table td{
+	border: 1px solid gray;
+	padding: 0.25em;
+}
+
+table{
+	width: 80%;
+	margin: 1em 10%;
+	border-collapse: collapse;
+}
