@@ -192,7 +192,7 @@ form *{
 
 @page{
 	size: A4;
-	margin: 0;
+	margin: 0.5in 0.25in;
 }
 
 @media print{
