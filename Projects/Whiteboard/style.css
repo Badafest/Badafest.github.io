@@ -1,0 +1,51 @@
+:root{
+	--fontSize: 1.5em;
+	--borderColor: rgb(230,230,230);
+}
+
+#latex{
+	outline:none;
+	border: 1px solid var(--borderColor);
+}
+
+main{
+	border: 1px solid var(--borderColor);
+	flex-grow:1;
+}
+
+body{
+	display:flex;
+}
+
+.MathJax{
+	font-size: var(--fontSize);
+}
+
+.hidden{
+	display:none;
+}
+
+#latexForm{
+	position: relative;
+	min-width: 1.2em;
+}
+
+#collapse{
+	position: absolute;
+	right: 2px;
+	top: 2px;
+	background-color: var(--borderColor);
+	border-radius: 50%;
+	width: 1.2em;
+	height: 1.2em;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid white;
+	transition: all 1s;
+}
+
+#collapse:hover,
+#collapse:focus{
+	background-color: white;
+	border: 1px solid var(--borderColor);
+}
