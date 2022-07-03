@@ -503,7 +503,7 @@ fillColorIcon.oninput = () => { changeFillColor(fillColorIcon.value) };
 
 strokeColorIcon.oninput = () => { changeStrokeColor(strokeColorIcon.value) };
 
-workingArea.addEventListener('click', (event) => {
+workingArea.addEventListener('mousedown', (event) => {
     removeById('minSep');
     removeById('majSep');
     removeById('tempIn');
@@ -591,19 +591,19 @@ const changeSvgUnits = (units, panX = null, panY = null) => {
     };
 };
 
-workingArea.addEventListener('mousemove', displayXY);
+workingArea.addEventListener('pointermove', displayXY);
 
-workingArea.addEventListener('mousedown', (event) => {
-    moveXYBool = true;
+workingArea.addEventListener('pointerdown', (event) => {
+	moveXYBool = true;
     mouseX = event.x;
     mouseY = event.y;
 });
 
-workingArea.addEventListener('mousemove', (event) => moveXY(moveXYBool, event));
+workingArea.addEventListener('pointermove', (event) => moveXY(moveXYBool, event));
 
-workingArea.addEventListener('mouseup', () => {
+workingArea.addEventListener('pointerup', () => {
     moveXYBool = false;
-})
+});
 
 const pressEsc = () => {
     var evt = new KeyboardEvent('keydown', { 'key': 'Escape' });

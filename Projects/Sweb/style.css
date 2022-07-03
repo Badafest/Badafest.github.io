@@ -230,6 +230,7 @@ button:active {
     border-radius: 2px;
     resize: both;
     overflow: hidden;
+	touch-action: none;
 }
 
 #xyDisplay {

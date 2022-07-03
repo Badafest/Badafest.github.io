@@ -340,8 +340,9 @@ editObjIcon.addEventListener('click', () => {
     openActionMsg(`Active Tool: Transform`, null);
 });
 
-workingArea.addEventListener('click', (evt) => {
+const onPointerUpDown = (evt) => {
     clickedCoordinates.push(coordinates.innerHTML);
+	if(activeTool!=null){moveXYBool=false}
     if (activeTool == 'line' && clickedCoordinates.length > 1) {
         if (clickedCoordinates.length == 2) {
             var A = clickedCoordinates[0].split(', ');
@@ -429,9 +430,12 @@ workingArea.addEventListener('click', (evt) => {
         clickedCoordinates = [];
         drawImage(A, B, imgUploadLink);
     };
-});
+};
 
-workingArea.addEventListener('mousemove', () => {
+workingArea.addEventListener('pointerdown', onPointerUpDown);
+workingArea.addEventListener('pointerup', (e)=>{clickedCoordinates[clickedCoordinates.length-1] == coordinates.innerHTML ? console.log('registered click'):onPointerUpDown(e)});
+
+workingArea.addEventListener('pointermove', () => {
     removeById('tempObj');
     if (clickedCoordinates.length > 0) {
         if (activeTool == 'line') {
