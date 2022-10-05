@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.title {
+  text-align: center;
+}
+
+.project-list {
+  text-align: center;
+}
+
+.project-list-item {
+  width: 60%;
+  padding: 0 20%;
+  position: absolute;
+  display: grid;
+  gap: 1em;
+  grid-template:
+    ". title ."
+    ". icon ."
+    "description description description"
+    "tech tech tech"
+    "live . source";
+  transition: opacity 0.75s;
+}
+
+.project-title {
+  grid-area: title;
+}
+
+.project-icon {
+  padding: 10%;
+  grid-area: icon;
+  display: inline;
+  width: 80%;
+}
+
+.project-description {
+  grid-area: description;
+  text-align: justify;
+}
+
+.project-tech {
+  grid-area: tech;
+}
+
+.project-live {
+  grid-area: live;
+}
+
+.project-source {
+  grid-area: source;
+}
+
+.nav-dots {
+  width: 60%;
+  padding: 0 20%;
+  display: flex;
+  justify-content: space-evenly;
+}

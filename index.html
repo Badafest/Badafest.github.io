@@ -1,155 +1,24 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>badafest</title>
-    <link rel='icon' href='./img.png'>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: monospace;
-            color: white;
-            text-align: center;
-        }
-	
-        a {
-            text-decoration: none;
-        }
-		
-		#footer a{
-			color:rgba(255, 255, 255, 0.5);
-		}
-        
-        hr {
-            margin-left: 1%;
-            width: 98%;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-        }
-		
-		#mainTitle{
-			margin-top:2%;
-			color:rgba(255, 255, 255, 0.25);
-			font-size: 10em;
-		}
-		
-		#projectsHead{
-			font-size:3em;
-			padding: 0 1em;
-			border-top: 0.0625em solid rgba(255, 255, 255, 0.25);
-			border-bottom: 0.0625em solid rgba(255, 255, 255, 0.25);
-			background:rgb(12, 12, 24); 
-		}
-		
-		#projects{
-			display:flex;
-			align-items:center;
-			justify-content: flex-start;
-			margin-top: 2em;
-			overflow: auto;
-			margin-left: 50%;
-			transform: translate(-50%);
-		}
-		
-		#projects *{
-			font-size: 1.75rem;
-		}
-		
-		.project-listing{
-			margin:1em 1.5em;
-			border-radius: 1em;
-		}
-		
-		#footer{
-			color:rgba(255, 255, 255, 0.25);
-			position: absolute;
-			bottom: 0;
-			font-size:2em;
-			padding:5px 0;
-			width:100%;
-			background-color:rgba(0,0,0,0.5);
-		}
-		
-		#container{
-			margin: 1em;
-		}
-	
-		
-		@media(max-width:577px){
-			#mainTitle{
-				font-size: 4em;
-			}
-			
-			#projectsHead{
-				font-size: 2em;
-			}
-			
-			#projects{
-				flex-direction: column;
-				height: 50vh;
-			}
-			
-			#projects *{
-				font-size: 1.5rem;
-			}
-			
-			#footer{
-				font-size: 1.5em;
-			}
-		}
-		
-    </style>
-</head>
-
-<body style='background:rgb(12, 12, 24);'>
-    <p id='mainTitle'>badafest</p>
-    <div id = "container">
-        <a id='projectsHead' target='_blank' href='https://github.com/Badafest/badafest.github.io/tree/master/Projects' >PROJECTS</a>
-        <div id='projects'>
-            <div class='project-listing'>
-                <a target="_blank" href="./Projects/Sweb/index.html">
-                    <div>
-                        <img height='128px' width='128px' src="./Projects/Sweb/sweb.svg">
-                        <p>Sweb</p>
-                    </div>
-                </a>
-                <hr>
-                <a target="_blank" href='https://github.com/Badafest/badafest.github.io/tree/master/Projects/Sweb'>
-                    <i >Source</i>
-                </a>
-            </div>
-			<div class='project-listing'>
-                <a target="_blank" href="./Projects/webTender/index.htm">
-                    <div>
-						<img height='128px' width='128px' src="./Projects/webTender/icon.svg">
-                        <p>Web Tender</p>
-                    </div>
-                </a>
-                <hr>
-                <a target="_blank" href='https://github.com/Badafest/badafest.github.io/tree/master/Projects/webTender'>
-                    <i >Source</i>
-                </a>
-			</div>
-			<div class='project-listing'>
-                <a target="_blank" href="./Projects/Whiteboard/index.htm">
-                    <div>
-						<img height='128px' width='128px' src="./Projects/Whiteboard/img.svg">
-                        <p>Whiteboard</p>
-                    </div>
-                </a>
-                <hr>
-                <a target="_blank" href='https://github.com/Badafest/badafest.github.io/tree/master/Projects/Whiteboard'>
-                    <i >Source</i>
-                </a>
-            </div>
-		</div>
-        <hr>
-    </div>
-    <div id='footer'>
-		(c) Sandip Dahal 2022
-    </div>
-</body>
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Badafest | Projects</title>
+    <link rel="icon" href="./img.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <h1 class="title">badafest</h1>
+    <h3 class="title">
+      <a
+        target="_blank"
+        href="https://github.com/Badafest/badafest.github.io/tree/master/Projects"
+        >PROJECTS</a
+      >
+    </h3>
+    <div class="nav-dots"></div>
+    <ul class="project-list"></ul>
+    <script src="./app.js"></script>
+  </body>
 </html>

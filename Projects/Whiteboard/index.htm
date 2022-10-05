@@ -1,19 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>WhiteBoard</title>
-	<link rel="icon" href="./img.svg" type="image/icon type">
-	<link rel="stylesheet" href="style.css">
-</head>
-<body>
-	<form id='latexForm'>
-		<div id='collapse'> « </div>
-		<textarea id='latex' name='latex' placeholder='Type LaTeX Here...'></textarea>
-	</form>
-	<main id='whiteboard'>
-	</main>
-	<script src='mathJax.js'></script>
-	<script src='app.js'></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>WhiteBoard</title>
+    <link rel="icon" href="./img.svg" type="image/icon type" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form id="latexForm">
+      <div>
+        <span id="collapse">«</span>
+        <input type="color" id="color" />
+      </div>
+      <textarea
+        id="latex"
+        name="latex"
+        placeholder="Type LaTeX Here..."
+      ></textarea>
+    </form>
+    <main id="whiteboard"></main>
+    <script src="mathJax.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
