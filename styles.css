@@ -1,13 +1,26 @@
+:root {
+  --black: #000000;
+  --primary: #14213d;
+  --secondary: #fca311;
+  --light: #e5e5e5;
+  --white: #fff;
+}
+
 * {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  color: inherit;
 }
 
-body {
+header {
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  row-gap: 0.5em;
+  text-align: center;
+  align-items: center;
+  background: var(--primary);
+  color: var(--light);
 }
 
 a {
@@ -15,31 +28,64 @@ a {
   color: inherit;
 }
 
+.brand {
+  padding: 0.5em;
+}
+
 .title {
-  text-align: center;
+  margin-bottom: 0.25em;
+}
+
+.button {
+  width: fit-content;
+  padding: 0.5em 32px;
+  background-color: var(--primary);
+  color: var(--light);
+  border-radius: 0.5em;
+  transition: color 0.5s, background-color 0.5s, border 0.5s;
+}
+
+.button:hover,
+.button:focus {
+  color: var(--primary);
+  background-color: var(--secondary);
+  border: 1px solid var(--primary);
 }
 
 .project-list {
   text-align: center;
+  color: var(--primary);
 }
 
 .project-list-item {
-  width: 60%;
-  padding: 0 20%;
   position: absolute;
+  left: 50%;
+  width: 60%;
+  padding: 1em 2em;
+  border-radius: 1em;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   display: grid;
   gap: 1em;
   grid-template:
     ". title ."
+    ". tag ."
     ". icon ."
     "description description description"
     "tech tech tech"
     "live . source";
   transition: opacity 0.75s;
+  transform: translate(-50%, 0%);
 }
 
 .project-title {
   grid-area: title;
+}
+
+.project-tag {
+  grid-area: tag;
+  font-size: small;
+  border-top: 1px solid;
+  padding-top: 0.75em;
 }
 
 .project-icon {
@@ -56,6 +102,19 @@ a {
 
 .project-tech {
   grid-area: tech;
+  font-size: small;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-bottom: 1px solid var(--light);
+  padding-bottom: 0.75em;
+}
+
+.tag {
+  margin: 0.125em;
+  padding: 6px;
+  background-color: var(--light);
+  border-radius: 12px;
 }
 
 .project-live {
@@ -67,8 +126,20 @@ a {
 }
 
 .nav-dots {
-  width: 60%;
-  padding: 0 20%;
+  width: 10%;
+  padding: 0.75em 45%;
   display: flex;
   justify-content: space-evenly;
+  color: var(--primary);
+}
+
+.nav-dot {
+  cursor: pointer;
+  font-size: larger;
+  transition: color 0.5s;
+}
+
+.nav-dot:hover,
+.nav-dot:focus {
+  color: var(--secondary);
 }

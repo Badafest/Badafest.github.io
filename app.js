@@ -1,7 +1,8 @@
 (() => {
   const projects = [
     {
-      title: "SWEB-SVG Editor on Web",
+      title: "SWEB",
+      tag: "A SVG Editor in Web",
       icon: "/Projects/Sweb/sweb.svg",
       live: "https://badafest.github.io/Projects/Sweb",
       source:
@@ -11,7 +12,8 @@
       tech: ["HTML", "CSS", "JS", "SVG", "JSZIP", "MATHJAX", "FFMPEG"],
     },
     {
-      title: "WebTender-Create Tender Documents",
+      title: "WebTender",
+      tag: "Create Tender Documents",
       icon: "/Projects/webTender/icon.svg",
       live: "https://badafest.github.io/Projects/webTender",
       source:
@@ -21,7 +23,8 @@
       tech: ["HTML", "CSS", "JS"],
     },
     {
-      title: "Whiteboard-A Simple LaTeX Frontend",
+      title: "Whiteboard",
+      tag: "A Simple LaTeX Frontend",
       icon: "/Projects/Whiteboard/img.svg",
       live: "https://badafest.github.io/Projects/Whiteboard",
       source:
@@ -44,6 +47,10 @@
     projectListItemTitle.innerText = project.title;
     projectListItemTitle.classList.add("project-title");
 
+    const projectListItemTag = document.createElement("p");
+    projectListItemTag.innerText = project.tag;
+    projectListItemTag.classList.add("project-tag");
+
     const projectListItemIcon = document.createElement("img");
     projectListItemIcon.setAttribute("src", project.icon);
     projectListItemIcon.classList.add("project-icon");
@@ -53,7 +60,12 @@
     projectListItemDescription.classList.add("project-description");
 
     const projectListItemTech = document.createElement("p");
-    projectListItemTech.innerText = project.tech.join(" | ");
+    project.tech.forEach((elem) => {
+      const techSpan = document.createElement("span");
+      techSpan.innerText = elem;
+      techSpan.classList.add("tag");
+      projectListItemTech.append(techSpan);
+    });
     projectListItemTech.classList.add("project-tech");
 
     const projectListItemLive = document.createElement("a");
@@ -61,14 +73,17 @@
     projectListItemLive.setAttribute("target", "_blank");
     projectListItemLive.innerText = "LIVE DEMO";
     projectListItemLive.classList.add("project-live");
+    projectListItemLive.classList.add("button");
 
     const projectListItemSource = document.createElement("a");
     projectListItemSource.setAttribute("target", "_blank");
     projectListItemSource.setAttribute("href", project.source);
     projectListItemSource.innerText = "SEE SOURCE";
     projectListItemSource.classList.add("project-source");
+    projectListItemSource.classList.add("button");
 
     projectListItem.append(projectListItemTitle);
+    projectListItem.append(projectListItemTag);
     projectListItem.append(projectListItemIcon);
     projectListItem.append(projectListItemDescription);
     projectListItem.append(projectListItemTech);
@@ -99,10 +114,12 @@
       (x) => x != active
     );
     projectList.children[active].style.opacity = 1;
+    projectList.children[active].style.zIndex = 999;
     navDots.children[active].innerText = "⬤";
     prevIndices.forEach((prevIndex) => {
       projectList.children[prevIndex].style.opacity = 0;
-      navDots.children[prevIndex].innerText = "◯";
+      projectList.children[prevIndex].style.zIndex = 0;
+      navDots.children[prevIndex].innerText = "⭘";
     });
     active = active < projects.length - 1 ? active + 1 : 0;
   };
@@ -115,4 +132,15 @@
 
   changeActive();
   setChangeActiveInterval();
+
+  ///disable opacity 0 links
+  document.querySelectorAll("a").forEach((elem) => {
+    elem.addEventListener("click", (e) => {
+      if (elem.parentElement.style.opacity === "0") {
+        e.preventDefault();
+        elem.classList.remove("button");
+        elem.classList.add("button");
+      }
+    });
+  });
 })();
