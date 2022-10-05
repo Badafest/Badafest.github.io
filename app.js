@@ -82,13 +82,17 @@
     projectListItemSource.classList.add("project-source");
     projectListItemSource.classList.add("button");
 
+    const projectListItemButtons = document.createElement("div");
+    projectListItemButtons.classList.add("btn-container");
+
     projectListItem.append(projectListItemTitle);
     projectListItem.append(projectListItemTag);
     projectListItem.append(projectListItemIcon);
     projectListItem.append(projectListItemDescription);
     projectListItem.append(projectListItemTech);
-    projectListItem.append(projectListItemLive);
-    projectListItem.append(projectListItemSource);
+    projectListItemButtons.append(projectListItemLive);
+    projectListItemButtons.append(projectListItemSource);
+    projectListItem.append(projectListItemButtons);
 
     projectList.append(projectListItem);
   });

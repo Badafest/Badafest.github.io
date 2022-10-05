@@ -72,7 +72,7 @@ a {
     ". icon ."
     "description description description"
     "tech tech tech"
-    "live . source";
+    "btns btns btns";
   transition: opacity 0.75s;
   transform: translate(-50%, 0%);
   min-width: 0;
@@ -123,12 +123,10 @@ a {
   border-radius: 12px;
 }
 
-.project-live {
-  grid-area: live;
-}
-
-.project-source {
-  grid-area: source;
+.btn-container {
+  grid-area: btns;
+  display: flex;
+  justify-content: space-around;
 }
 
 .nav-dots {
@@ -153,12 +151,12 @@ a {
 @media only screen and (max-width: 768px) {
   .project-list-item {
     grid-template:
-      "title title"
-      "tag tag"
-      "icon icon"
-      "description description"
-      "tech tech"
-      "live source";
+      "title"
+      "tag"
+      "icon"
+      "description"
+      "tech"
+      "btns";
   }
 
   .button {
