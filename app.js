@@ -131,7 +131,7 @@
   const setChangeActiveInterval = () => {
     changeActiveInterval = setInterval(() => {
       changeActive();
-    }, 8000);
+    }, 15000);
   };
 
   changeActive();

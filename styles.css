@@ -30,6 +30,7 @@ a {
 
 .brand {
   padding: 0.5em;
+  opacity: 0.75;
 }
 
 .title {
@@ -85,6 +86,7 @@ a {
 
 .project-title {
   grid-area: title;
+  font-size: 1.25em;
 }
 
 .project-tag {
@@ -127,6 +129,7 @@ a {
   grid-area: btns;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .nav-dots {
@@ -160,6 +163,12 @@ a {
   }
 
   .button {
-    padding: 0.5em 16px;
+    padding: 0.5em auto;
+    width: 10em;
+  }
+
+  .btn-container {
+    flex-direction: column;
+    gap: 0.5em;
   }
 }
