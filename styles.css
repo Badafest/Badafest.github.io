@@ -16,7 +16,7 @@
 header {
   display: flex;
   flex-direction: column;
-  row-gap: 0.5em;
+  row-gap: 0.125em;
   text-align: center;
   align-items: center;
   background: var(--primary);
@@ -29,12 +29,13 @@ a {
 }
 
 .brand {
+  margin-top: 0.5em;
   padding: 0.5em;
   opacity: 0.75;
 }
 
 .title {
-  margin-bottom: 0.25em;
+  margin-bottom: 0.5em;
 }
 
 .button {
@@ -97,10 +98,10 @@ a {
 }
 
 .project-icon {
-  padding: 5%;
   grid-area: icon;
   display: inline;
-  max-width: 100%;
+  width: 60%;
+  margin: 0 20%;
 }
 
 .project-description {
@@ -164,7 +165,7 @@ a {
 
   .button {
     padding: 0.5em auto;
-    width: 10em;
+    width: 8em;
   }
 
   .btn-container {
