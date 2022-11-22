@@ -1,6 +1,24 @@
 (() => {
   const projects = [
     {
+      title: "Lister",
+      tag: "Create and Share Lists",
+      icon: "https://lister-badafest.netlify.app/assets/images/icon.jpg",
+      live: "https://lister-badafest.netlify.app",
+      source: "https://github.com/Badafest/lister-react-app",
+      description:
+        "Lister is an app to create and share lists, hosted on netlify. It implements CRUD functionality using React and RESTful API using express. Users can create private or public lists with support for images (using cloudinary cdn). Styling is done using the bootstrap css framework.",
+      tech: [
+        "MONGO DB",
+        "EXPRESS",
+        "REACT",
+        "NODE",
+        "BOOTSTRAP",
+        "NETLIFY",
+        "CLOUDINARY",
+      ],
+    },
+    {
       title: "SWEB",
       tag: "A SVG Editor in Web",
       icon: "/Projects/Sweb/sweb.svg",
