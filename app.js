@@ -161,7 +161,6 @@
       if (elem.parentElement.style.opacity === "0") {
         e.preventDefault();
         elem.classList.remove("button");
-        elem.classList.add("button");
       }
     });
   });
